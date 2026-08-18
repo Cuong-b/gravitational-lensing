@@ -26,22 +26,31 @@ def einstein_ring(mass, d_l, d_ls):
     arcsec = arcmin*60
     return radians, degrees, arcmin, arcsec
 
+def beta(x, y):
+    return np.sqrt((x**2)+(y**2))
+
+def theta_plus(beta, theta_einstein):
+    return (1/2)*(beta+np.sqrt((beta**2)+(4*(theta_einstein**2))))
+
+def theta_minus(beta, theta_einstein):
+    return (1/2)*(beta-np.sqrt((beta**2)+(4*(theta_einstein**2))))
+
 '''Calculates the coordinates of the lensing projections 
 given an x,y coordinate and Einstein radius in arcseconds
 '''
 def image_projections(x,y, theta_einstein): 
     direction = np.arctan2(y,x) #solve for the direction of the projection
             
-    beta = np.sqrt((x**2)+(y**2)) #calculates beta
+    b = beta(x,y) #calculates beta
 
-    theta_plus = (1/2)*(beta+np.sqrt((beta**2)+(4*(theta_einstein**2))))
-    theta_minus = (1/2)*(beta-np.sqrt((beta**2)+(4*(theta_einstein**2))))
+    t_plus = theta_plus(b, theta_einstein)
+    t_minus = theta_minus(b, theta_einstein)
     
-    x_plus = theta_plus*np.cos(direction) #theta results are split into corresponding x and y coords using direction
-    y_plus = theta_plus*np.sin(direction)
+    x_plus = t_plus*np.cos(direction) #theta results are split into corresponding x and y coords using direction
+    y_plus = t_plus*np.sin(direction)
     
-    x_minus = theta_minus*np.cos(direction)
-    y_minus = theta_minus*np.sin(direction)
+    x_minus = t_minus*np.cos(direction)
+    y_minus = t_minus*np.sin(direction)
     
     return x_plus, y_plus, x_minus, y_minus
 
@@ -49,13 +58,13 @@ def image_projections(x,y, theta_einstein):
 Calculates the average magnification of the background source over all n points
 '''
 def magnification(x,y, theta_einstein): #einstein radius in arcsec
-    beta = np.sqrt((x**2)+(y**2))
+    b = beta(x,y)
 
-    theta_plus = (1/2)*(beta+np.sqrt((beta*2)+(4*(theta_einstein**2))))
-    theta_minus = (1/2)*(beta-np.sqrt((beta*2)+(4*(theta_einstein**2))))
+    t_plus = theta_plus(b, theta_einstein)
+    t_minus = theta_minus(b, theta_einstein)
     
-    alpha_plus = (theta_plus/beta)*(1+(beta/np.sqrt((beta**2)+(4*(theta_einstein**2)))))
-    alpha_minus = (theta_minus/beta)*(1-(beta/np.sqrt((beta**2)+(4*(theta_einstein**2)))))
+    alpha_plus = (t_plus/b)*(1+(b/np.sqrt((b**2)+(4*(theta_einstein**2)))))
+    alpha_minus = (t_minus/b)*(1-(b/np.sqrt((b**2)+(4*(theta_einstein**2)))))
     
     magnification = abs(alpha_plus)+abs(alpha_minus) 
     mean_mag = np.mean(magnification)
