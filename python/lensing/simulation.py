@@ -15,25 +15,6 @@ def generate_point(radius):
     else:
         return generate_point(radius)
 
-'''Calculates the coordinates of the lensing projections 
-given an x,y coordinate and Einstein radius in arcseconds
-'''
-def image_projections(x,y, theta_einstein): 
-    direction = np.arctan2(y,x) #solve for the direction of the projection
-            
-    beta = np.sqrt((x**2)+(y**2)) #calculates beta
-
-    theta_plus = (1/2)*(beta+np.sqrt((beta**2)+(4*(theta_einstein**2))))
-    theta_minus = (1/2)*(beta-np.sqrt((beta**2)+(4*(theta_einstein**2))))
-    
-    x_plus = theta_plus*np.cos(direction) #theta results are split into corresponding x and y coords using direction
-    y_plus = theta_plus*np.sin(direction)
-    
-    x_minus = theta_minus*np.cos(direction)
-    y_minus = theta_minus*np.sin(direction)
-    
-    return x_plus, y_plus, x_minus, y_minus
-
 '''
 Creates a list of magnificatons across the traversed beta
 Provides a live feedback of magnification that changes when slider value is changed
