@@ -1,5 +1,5 @@
 import numpy as np
-from lensing.physics import magnification
+from python.lensing.physics import magnification
 
 '''
 Generates a set of x,y coordinates that fall within radius r
@@ -19,7 +19,7 @@ def generate_point(radius):
 Creates a list of magnificatons across the traversed beta
 Provides a live feedback of magnification that changes when slider value is changed
 '''
-def plot_magnification(x, dx, y, theta_einstein):
+def magnification_curve(x, dx, y, theta_einstein):
     mags = []
     for i in dx:
         loc = x-i
