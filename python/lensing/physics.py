@@ -60,11 +60,16 @@ Calculates the average magnification of the background source over all n points
 def magnification(x,y, theta_einstein): #einstein radius in arcsec
     b = beta(x,y)
 
+    if np.any(b == 0):
+        raise ValueError(
+            "Magnification is undefined at beta = 0 in this point source model."
+        )
+
     t_plus = theta_plus(b, theta_einstein)
     t_minus = theta_minus(b, theta_einstein)
     
-    alpha_plus = (t_plus/b)*(1+(b/np.sqrt((b**2)+(4*(theta_einstein**2)))))
-    alpha_minus = (t_minus/b)*(1-(b/np.sqrt((b**2)+(4*(theta_einstein**2)))))
+    alpha_plus = (t_plus/(2*b))*(1+(b/np.sqrt((b**2)+(4*(theta_einstein**2)))))
+    alpha_minus = (t_minus/(2*b))*(1-(b/np.sqrt((b**2)+(4*(theta_einstein**2)))))
     
     magnification = abs(alpha_plus)+abs(alpha_minus) 
     mean_mag = np.mean(magnification)
