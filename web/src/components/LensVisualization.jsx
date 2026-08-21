@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { imageProjections} from "../physics/imageProjections";
 import { renderLensSystem } from "../rendering/lensCanvas";
 
-export function LensVisualization({sourceX, sourceY}) {
+export function LensVisualization({sourceX, sourceY, thetaEinstein}) {
     const canvasRef = useRef(null);
 
     useEffect(() => {
@@ -13,8 +13,6 @@ export function LensVisualization({sourceX, sourceY}) {
         }
 
         const ctx = canvas.getContext("2d");
-
-        const thetaEinstein = 1.33;
 
         const animationFrame = requestAnimationFrame(() => {
                 const source = {

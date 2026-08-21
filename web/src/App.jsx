@@ -1,48 +1,31 @@
 import { useState } from "react";
 
-import { LensVisualization } from "./components/LensVisualization.jsx";
-
-import { SourceControls } from "./components/SourceControls.jsx";
+import { MulitpleImagingSection } from "./components/MultipleImagingSection"; 
 
 import "./App.css";
 
 
 function App() {
 
-    const [sourceX, setSourceX] = useState(0);
-    const [sourceY, setSourceY] = useState(0);
-
-    function handleSourceXChange(event){
-      setSourceX(
-        Number(event.target.value)
-      );
-    }
-
-    function handleSourceYChange(event){
-      setSourceY(
-        Number(event.target.value)
-      );
-    }
-
-
     return (
-        <main>
-            <h1>
-                Gravitational Lensing Explorer
-            </h1>
+            <main className="lesson">
 
-            <SourceControls
-            sourceX = {sourceX}
-            sourceY = {sourceY}
-            onXChange = {handleSourceXChange}
-            onYChange = {handleSourceYChange}
-            />
+                <header className="lesson-header">
 
-            <LensVisualization
-              sourceX={sourceX}
-              sourceY={sourceY}
-            />
-        </main>
+                    <h1>
+                        Gravitational Lensing
+                    </h1>
+
+                    <p className="lesson-introduction">
+                        An interactive exploration of how massive
+                        objects distort the paths of light.
+                    </p>
+
+                </header>
+
+                <MulitpleImagingSection />
+
+            </main>
     );
 }
 

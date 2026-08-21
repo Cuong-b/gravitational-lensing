@@ -28,3 +28,32 @@
     grid-template-columns: 1fr;
   }
 }
+
+.lesson {
+    width: min(900px, 92vw);
+    margin-inline: auto;
+    padding-block: clamp(2rem, 6vw, 5rem);
+}
+
+.lesson-header {
+    margin-bottom: clamp(3rem, 8vw, 6rem);
+}
+
+.lesson-header h1 {
+    margin-bottom: 1rem;
+}
+
+.lesson-introduction {
+    max-width: 65ch;
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+.lesson-section {
+    margin-block: clamp(3rem, 8vw, 6rem);
+}
+
+.lesson-section > p {
+    max-width: 70ch;
+    line-height: 1.7;
+}
