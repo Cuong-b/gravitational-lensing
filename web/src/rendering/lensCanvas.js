@@ -1,11 +1,16 @@
+import { imageProjections } from "../physics/imageProjections";
+
 export function clearCanvas(ctx, width, height) {
     ctx.clearRect(0, 0, width, height);
 }
 
-export function drawPoint(ctx, x, y, radius = 4) {
+export function drawPoint(ctx, x, y, radius = 4, color = '#ffffff') {
+    ctx.save();
+    ctx.fillStyle = color;
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
     ctx.fill();
+    ctx.restore();
 }
 
 export function drawRing(ctx, x, y, radius) {
@@ -22,9 +27,11 @@ export function worldToCanvas( x, y, width, height, scale) {
 }
 
 export function renderLensSystem(ctx, canvas, system) {
-    const { source, images, thetaEinstein, scale, aligned} = system;
+    const { source, sourcePoints, thetaEinstein, scale, aligned, colors} = system;
 
     clearCanvas( ctx, canvas.width, canvas.height);
+
+    drawBackground( ctx, canvas.width, canvas.height, colors.background);
 
     drawAxes( ctx, canvas.width, canvas.height);
 
@@ -42,53 +49,26 @@ export function renderLensSystem(ctx, canvas, system) {
             scale
         );
 
-    drawRing(
+    drawExtendedSource(
         ctx,
-        center.x,
-        center.y,
-        thetaEinstein * scale
+        sourcePoints,
+        source.x,
+        source.y,
+        canvas,
+        scale,
+        colors
     );
 
-    drawPoint(
+    drawProjectedSource(
         ctx,
-        sourceCanvas.x,
-        sourceCanvas.y,
-        5
+        sourcePoints,
+        source.x,
+        source.y,
+        thetaEinstein,
+        canvas,
+        scale,
+        colors
     );
-
-    if (!aligned && images){
-        const plusCanvas =
-            worldToCanvas(
-                images.plus.x,
-                images.plus.y,
-                canvas.width,
-                canvas.height,
-                scale
-        );
-
-        const minusCanvas =
-            worldToCanvas(
-                images.minus.x,
-                images.minus.y,
-                canvas.width,
-                canvas.height,
-                scale
-        );
-
-        drawPoint(
-            ctx,
-            plusCanvas.x,
-            plusCanvas.y,
-            5
-        );
-
-        drawPoint(
-            ctx,
-            minusCanvas.x,
-            minusCanvas.y,
-            5
-        );
-    }
 }
 
 export function drawAxes(ctx, width, height) {
@@ -101,4 +81,90 @@ export function drawAxes(ctx, width, height) {
     ctx.lineTo(width / 2, height);
 
     ctx.stroke();
+}
+
+function drawExtendedSource( ctx, points, offsetX, offsetY, canvas, scale, colors) {
+
+    for (const point of points) {
+
+        const position =
+            worldToCanvas(
+                point.x + offsetX,
+                point.y + offsetY,
+                canvas.width,
+                canvas.height,
+                scale
+            );
+
+        drawPoint(
+            ctx,
+            position.x,
+            position.y,
+            1.5,
+            colors.source
+        );
+    }
+}
+
+function drawProjectedSource( ctx, points, offsetX, offsetY, thetaEinstein, canvas, scale, colors) {
+
+    for (const point of points) {
+
+        const sourceX =
+            point.x + offsetX;
+
+        const sourceY =
+            point.y + offsetY;
+
+        const b = Math.hypot(sourceX, sourceY);
+        
+        const tolerance = 1e-10;
+
+        if (b < tolerance) {
+            continue;
+        }
+
+        const images = imageProjections( sourceX, sourceY, thetaEinstein);
+
+        const plus =
+            worldToCanvas(
+                images.plus.x,
+                images.plus.y,
+                canvas.width,
+                canvas.height,
+                scale
+            );
+
+        const minus =
+            worldToCanvas(
+                images.minus.x,
+                images.minus.y,
+                canvas.width,
+                canvas.height,
+                scale
+            );
+
+        drawPoint(
+            ctx,
+            plus.x,
+            plus.y,
+            1.5,
+            colors.projected
+        );
+
+        drawPoint(
+            ctx,
+            minus.x,
+            minus.y,
+            1.5,
+            colors.projected
+        );
+    }
+}
+
+function drawBackground(ctx, width, height, color) {
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, width, height);
+    ctx.restore();
 }

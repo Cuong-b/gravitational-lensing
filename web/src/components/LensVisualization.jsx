@@ -2,7 +2,16 @@ import { useEffect, useRef } from "react";
 import { imageProjections} from "../physics/imageProjections";
 import { renderLensSystem } from "../rendering/lensCanvas";
 
-export function LensVisualization({sourceX, sourceY, thetaEinstein}) {
+const VISUALIZATION_COLORS = {
+    background: "#05070a",
+    source: "#f5b942",
+    projected: "#b66cff",
+    lens: "#ffffff",
+    ring: "#6b7280",
+    axes: "#64748b"
+};
+
+export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein, colors}) {
     const canvasRef = useRef(null);
 
     useEffect(() => {
@@ -20,7 +29,7 @@ export function LensVisualization({sourceX, sourceY, thetaEinstein}) {
                     y: sourceY
                 };
 
-                const epsilon = 0.01;
+                const epsilon = 0.001;
 
                 const aligned =
                     Math.hypot(
@@ -28,24 +37,16 @@ export function LensVisualization({sourceX, sourceY, thetaEinstein}) {
                         source.y
                     ) < epsilon;
 
-                const images =
-                    aligned
-                        ? null
-                        : imageProjections(
-                            source.x,
-                            source.y,
-                            thetaEinstein
-                        );
-
                 renderLensSystem(
                     ctx,
                     canvas,
                     {
                         source,
-                        images,
+                        sourcePoints,
                         thetaEinstein,
                         scale: 60,
-                        aligned
+                        aligned,
+                        colors: VISUALIZATION_COLORS
                     }
                 );
           });
@@ -56,9 +57,48 @@ export function LensVisualization({sourceX, sourceY, thetaEinstein}) {
         
     }, [sourceX, sourceY]);
 
-    return (<canvas
-                ref={canvasRef}
-                width="800"
-                height="600"
-            />);
+    return (<div className="visualization"
+                 style={{            
+                        "--source-color":
+                        VISUALIZATION_COLORS.source,
+
+                        "--projected-color":
+                            VISUALIZATION_COLORS.projected,
+
+                        "--lens-color":
+                            VISUALIZATION_COLORS.lens,
+
+                        "--sky-color":
+                            VISUALIZATION_COLORS.background}}
+            >
+
+                <canvas
+                    ref={canvasRef}
+                    className="lens-canvas"
+                    width="800"
+                    height="600"
+                />
+
+                <div className="visualization-legend">
+
+                    <span>
+                        <span
+                            className="legend-marker source-marker"
+                            aria-hidden="true"
+                        />
+                        Source
+                    </span>
+
+                    <span>
+                        <span
+                            className="legend-marker image-marker"
+                            aria-hidden="true"
+                        />
+                        Projected image
+                    </span>
+
+                </div>
+
+            </div>
+        );
 }

@@ -1,3 +1,4 @@
+/*=== Source Controls ===*/
 .source-controls {
     margin-block: 1.5rem;
 }
@@ -29,6 +30,7 @@
   }
 }
 
+/*=== Lesson Section ===*/
 .lesson {
     width: min(900px, 92vw);
     margin-inline: auto;
@@ -56,4 +58,80 @@
 .lesson-section > p {
     max-width: 70ch;
     line-height: 1.7;
+}
+
+.equation {
+    margin-block: 1.5rem;
+
+    padding:
+        clamp(0.75rem, 2vw, 1.25rem);
+
+    overflow-x: auto;
+
+    text-align: center;
+}
+
+.lesson-note {
+    margin-block: 1.5rem;
+
+    padding: 1rem 1.25rem;
+
+    border-left: 3px solid
+        currentColor;
+
+    font-size: 0.95rem;
+}
+
+/*=== Legend ===*/
+.lens-canvas {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    background:
+        var(--sky-color);
+
+    border-radius: 8px;
+}
+
+.visualization-legend {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 1.5rem;
+
+    margin-top: 1rem;
+}
+
+.legend-item {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 0.5rem;
+}
+
+.legend-marker {
+    width: 0.75rem;
+    height: 0.75rem;
+
+    border-radius: 50%;
+}
+
+.legend-source {
+    background:
+        var(--source-color);
+}
+
+.legend-projected {
+    background:
+        var(--projected-color);
+}
+
+.legend-lens {
+    background:
+        var(--lens-color);
+
+    border: 1px solid #6b7280;
 }
