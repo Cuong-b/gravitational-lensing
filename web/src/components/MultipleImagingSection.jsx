@@ -15,20 +15,30 @@ export function MulitpleImagingSection() {
 
     const thetatEinstein = 2.33;
 
-    const sourcePoints = useMemo(() => generateSourcePoints(75000, 0.5), []);
+    const sourcePoints = useMemo(() => generateSourcePoints(3000, 0.5), []);
 
     const beta = Math.hypot(sourceX, sourceY);
 
-    function handleSourceXChange(event){
-      setSourceX(
-        Number(event.target.value)
-      );
+    const SOURCE_LIMIT = 5;
+
+    function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
     }
 
-    function handleSourceYChange(event){
-      setSourceY(
-        Number(event.target.value)
-      );
+    function handleSourceChange({x, y}) {
+        const clampedX = clamp(x, -SOURCE_LIMIT, SOURCE_LIMIT);
+        const clampedY = clamp(y, -SOURCE_LIMIT, SOURCE_LIMIT);
+
+        setSourceX(clampedX);
+        setSourceY(clampedY);
+    }
+
+    function handleSourceXChange(value){
+      setSourceX(value);
+    }
+
+    function handleSourceYChange(value){
+      setSourceY(value);
     }
 
     return(<section className="lesson-section">
@@ -136,6 +146,8 @@ export function MulitpleImagingSection() {
                         sourceY={sourceY}
                         sourcePoints={sourcePoints}
                         thetaEinstein={thetatEinstein}
+                        sourceRadius={0.5}
+                        onSourceChange={handleSourceChange}
                     />
 
                 </section>);

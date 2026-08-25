@@ -4,25 +4,36 @@ export function clearCanvas(ctx, width, height) {
     ctx.clearRect(0, 0, width, height);
 }
 
-export function drawPoint(ctx, x, y, radius = 4, color = '#ffffff') {
+export function drawPoint(ctx, x, y, radius = 4, color = '#ffffff', alpha = 1) {
     ctx.save();
     ctx.fillStyle = color;
+    ctx.globalAlpha = alpha;
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
 }
 
-export function drawRing(ctx, x, y, radius) {
+export function drawRing(ctx, x, y, radius, color = '#ffffff') {
+    ctx.save();
+    ctx.strokeStyle = color;
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
     ctx.stroke();
+    ctx.restore();
 }
 
 export function worldToCanvas( x, y, width, height, scale) {
     return {
         x: width / 2 + x * scale,
         y: height / 2 - y * scale
+    };
+}
+
+export function canvasToWorld( x, y, width, height, scale) {
+    return {
+        x: (x - width / 2) / scale,
+        y: (height/2 - y) / scale
     };
 }
 
@@ -49,26 +60,11 @@ export function renderLensSystem(ctx, canvas, system) {
             scale
         );
 
-    drawExtendedSource(
-        ctx,
-        sourcePoints,
-        source.x,
-        source.y,
-        canvas,
-        scale,
-        colors
-    );
+    drawExtendedSource( ctx, sourcePoints, source.x, source.y, canvas, scale, colors);
 
-    drawProjectedSource(
-        ctx,
-        sourcePoints,
-        source.x,
-        source.y,
-        thetaEinstein,
-        canvas,
-        scale,
-        colors
-    );
+    drawRing( ctx, center.x, center.y, 4, colors.lens);
+
+    drawProjectedSource( ctx, sourcePoints, source.x, source.y, thetaEinstein, canvas, scale, colors);
 }
 
 export function drawAxes(ctx, width, height) {
@@ -101,7 +97,8 @@ function drawExtendedSource( ctx, points, offsetX, offsetY, canvas, scale, color
             position.x,
             position.y,
             1.5,
-            colors.source
+            colors.source,
+            .7
         );
     }
 }
@@ -143,21 +140,26 @@ function drawProjectedSource( ctx, points, offsetX, offsetY, thetaEinstein, canv
                 canvas.height,
                 scale
             );
-
+            
+        const projected_radius = 2
+        const projected_alpha = .7;
+        
         drawPoint(
             ctx,
             plus.x,
             plus.y,
-            1.5,
-            colors.projected
+            projected_radius,
+            colors.projected,
+            projected_alpha
         );
 
         drawPoint(
             ctx,
             minus.x,
             minus.y,
-            1.5,
-            colors.projected
+            projected_radius,
+            colors.projected,
+            projected_alpha
         );
     }
 }

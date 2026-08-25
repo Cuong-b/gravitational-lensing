@@ -82,7 +82,6 @@
     font-size: 0.95rem;
 }
 
-/*=== Legend ===*/
 .lens-canvas {
     display: block;
 
@@ -93,45 +92,62 @@
         var(--sky-color);
 
     border-radius: 8px;
+
+    cursor: grab;
+
+    touch-action: none;
 }
+
+.lens-canvas.dragging {
+    cursor: grabbing;
+}
+
+/*=== Legend ===*/
 
 .visualization-legend {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
 
-    gap: 1.5rem;
+    gap: 1rem 1.5rem;
 
     margin-top: 1rem;
+    padding: 0.85rem 1rem;
+
+    border: 1px solid #374151;
+    border-radius: 0.75rem;
+
+    background: #0b0f14;
+    color: #e5e7eb;
 }
 
 .legend-item {
     display: inline-flex;
-
     align-items: center;
-
     gap: 0.5rem;
 }
 
 .legend-marker {
-    width: 0.75rem;
-    height: 0.75rem;
+    display: inline-block;
+
+    width: 0.8rem;
+    height: 0.8rem;
+
+    flex: 0 0 auto;
 
     border-radius: 50%;
 }
 
 .legend-source {
-    background:
-        var(--source-color);
+    background-color: var(--source-color);
 }
 
 .legend-projected {
-    background:
-        var(--projected-color);
+    background-color: var(--projected-color);
 }
 
 .legend-lens {
-    background:
-        var(--lens-color);
+    /* background-color: var(--lens-color); */
 
-    border: 1px solid #6b7280;
+    border: 2px solid var(--lens-color);
 }

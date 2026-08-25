@@ -18,7 +18,7 @@ export function SourceControls({sourceX, sourceY, onXChange, onYChange}) {
                     max="5"
                     step="0.1"
                     value={sourceX}
-                    onChange={onXChange}
+                    onChange={(event) => onXChange(Number(event.target.value))}
                     /> 
                     <input
                     type="number"
@@ -26,7 +26,7 @@ export function SourceControls({sourceX, sourceY, onXChange, onYChange}) {
                     max="5"
                     step="0.01"
                     value={sourceX}
-                    onChange={onXChange}
+                    onChange={(event) => onXChange(Number(event.target.value))}
                     />
                 </div>
                 
@@ -45,7 +45,7 @@ export function SourceControls({sourceX, sourceY, onXChange, onYChange}) {
                     max="5"
                     step="0.1"
                     value={sourceY}
-                    onChange={onYChange}
+                    onChange={(event) => onYChange(Number(event.target.value))}
                 />
                 <input
                     type="number"
@@ -53,7 +53,7 @@ export function SourceControls({sourceX, sourceY, onXChange, onYChange}) {
                     max="5"
                     step="0.1"
                     value={sourceY}
-                    onChange={onYChange}
+                    onChange={(event) => onYChange(Number(event.target.value))}
                 />
                 </div>
             </div>
