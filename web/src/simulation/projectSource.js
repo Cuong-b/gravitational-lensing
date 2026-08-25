@@ -1,8 +1,8 @@
 import { imageProjections} from "../physics/imageProjections";
 
 export function projectSource(sourcePoints, offsetX, offsetY, thetaEinstein){
-    const source = [];
-    const projected = [];
+    const sourceArray = [];
+    const projectedArray = [];
 
     const ZERO_TOLERANCE = 1e-10;
 
@@ -10,7 +10,7 @@ export function projectSource(sourcePoints, offsetX, offsetY, thetaEinstein){
         const x = point.x + offsetX;
         const y = point.y + offsetY;
 
-        source.push({x, y});
+        sourceArray.push({x, y});
 
         const beta = Math.hypot(x, y);
 
@@ -20,8 +20,8 @@ export function projectSource(sourcePoints, offsetX, offsetY, thetaEinstein){
 
         const images = imageProjections(x, y, thetaEinstein);
 
-        projected.push(images.plus, images.minus);
+        projectedArray.push(images.plus, images.minus);
     }
 
-    return{source, projected};
+    return {sourceArray, projectedArray};
 }

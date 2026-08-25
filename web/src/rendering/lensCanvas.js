@@ -1,5 +1,7 @@
 import { imageProjections } from "../physics/imageProjections";
 
+import { projectSource } from "../simulation/projectSource";
+
 export function clearCanvas(ctx, width, height) {
     ctx.clearRect(0, 0, width, height);
 }
@@ -37,36 +39,6 @@ export function canvasToWorld( x, y, width, height, scale) {
     };
 }
 
-export function renderLensSystem(ctx, canvas, system) {
-    const { source, sourcePoints, thetaEinstein, scale, aligned, colors} = system;
-
-    clearCanvas( ctx, canvas.width, canvas.height);
-
-    drawBackground( ctx, canvas.width, canvas.height, colors.background);
-
-    drawAxes( ctx, canvas.width, canvas.height);
-
-    const center = {
-        x: canvas.width / 2,
-        y: canvas.height / 2
-    };
-
-    const sourceCanvas = 
-    worldToCanvas(
-            source.x,
-            source.y,
-            canvas.width,
-            canvas.height,
-            scale
-        );
-
-    drawExtendedSource( ctx, sourcePoints, source.x, source.y, canvas, scale, colors);
-
-    drawRing( ctx, center.x, center.y, 4, colors.lens);
-
-    drawProjectedSource( ctx, sourcePoints, source.x, source.y, thetaEinstein, canvas, scale, colors);
-}
-
 export function drawAxes(ctx, width, height) {
     ctx.beginPath();
 
@@ -77,6 +49,26 @@ export function drawAxes(ctx, width, height) {
     ctx.lineTo(width / 2, height);
 
     ctx.stroke();
+}
+
+function drawPointCloud(ctx, points, radius, color, alpha = 1) {
+    ctx.save();
+
+    ctx.fillStyle = color;
+    ctx.globalAlpha = alpha;
+
+    ctx.beginPath();
+
+    for (const point of points) {
+
+        ctx.moveTo( point.x + radius, point.y);
+
+        ctx.arc( point.x, point.y, radius, 0, Math.PI * 2);
+    }
+
+    ctx.fill();
+
+    ctx.restore();
 }
 
 function drawExtendedSource( ctx, points, offsetX, offsetY, canvas, scale, colors) {
@@ -169,4 +161,30 @@ function drawBackground(ctx, width, height, color) {
     ctx.fillStyle = color;
     ctx.fillRect(0, 0, width, height);
     ctx.restore();
+}
+
+export function renderLensSystem(ctx, canvas, system) {
+    const { source, sourcePoints, thetaEinstein, scale, aligned, colors} = system;
+
+    clearCanvas( ctx, canvas.width, canvas.height);
+
+    drawBackground( ctx, canvas.width, canvas.height, colors.background);
+
+    drawAxes( ctx, canvas.width, canvas.height);
+
+    const center = {
+        x: canvas.width / 2,
+        y: canvas.height / 2
+    };
+
+    const {sourceArray, projectedArray} = projectSource(sourcePoints, source.x, source.y, thetaEinstein);
+
+    const sourceCanvasPoints = sourceArray.map(point => worldToCanvas(point.x, point.y, canvas.width, canvas.height, scale));
+    const projectedCanvasPoints = projectedArray.map(point => worldToCanvas(point.x, point.y, canvas.width, canvas.height, scale));
+
+    drawPointCloud(ctx, sourceCanvasPoints, 1.5, colors.source, .8);
+
+    drawPointCloud(ctx, projectedCanvasPoints, 2, colors.projected, .7);
+
+    drawRing( ctx, center.x, center.y, 4, colors.lens);
 }
