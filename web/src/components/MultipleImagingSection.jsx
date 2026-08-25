@@ -15,7 +15,7 @@ export function MulitpleImagingSection() {
 
     const thetatEinstein = 2.33;
 
-    const sourcePoints = useMemo(() => generateSourcePoints(3000, 0.5), []);
+    const sourcePoints = useMemo(() => generateSourcePoints(6000, 0.5), []);
 
     const beta = Math.hypot(sourceX, sourceY);
 
@@ -53,15 +53,15 @@ export function MulitpleImagingSection() {
                     </p>
 
                     <p>
-                        Given an angular separation  𝛽  between the the lens and the
+                        Given an angular separation <Equation inline>{String.raw`\beta`}</Equation> between the the lens and the
                          source with respects to the observer, we can solve for the 
-                         angles,  𝜃+  and  𝜃− , where the projections of the source would appear.
+                         angles, <Equation inline>{String.raw`\theta_+`}</Equation> and <Equation inline>{String.raw`\theta_-`}</Equation>, where the projections of the source would appear.
                     </p>
 
                     <h3>Deriving the lens equation</h3>
 
                     <p>
-                        To solve for  𝜃± , we first notice in the figure above the following relation:
+                        To solve for  <Equation inline>{String.raw`\theta_{\pm}`}</Equation> , we first notice in the figure above the following relation:
                     </p>
 
                     <Equation>
@@ -77,13 +77,13 @@ export function MulitpleImagingSection() {
                     </Equation>
 
                     <aside className="lesson-note">
-                        Note: Here we wrote 𝜃 instead of 𝜃+ as the end result will give us both 𝜃+ and  𝜃
+                        Note: Here we wrote <Equation inline>{String.raw`\theta`}</Equation> instead of <Equation inline>{String.raw`\theta_+`}</Equation>
+                         as the end result will give us both <Equation inline>{String.raw`\theta_+`}</Equation> and <Equation inline>{String.raw`\theta_-`}</Equation>
                     </aside>
 
                     <p>
-                        Recalling the light-deflection relation for α,
-                        we can solve for β and substitute the deflection
-                        term:
+                        Recalling the light-deflection relation <Equation inline>{String.raw`\alpha = \frac{4GM}{c^2b} = (\frac{4GM}{c^2})\frac{1}{\theta_ED_l}`}</Equation>,
+                        we can solve for <Equation inline>{String.raw`\beta`}</Equation> and substitute <Equation inline>{String.raw`\alpha`}</Equation>,
                     </p>
 
                     <Equation>
@@ -91,7 +91,7 @@ export function MulitpleImagingSection() {
                     </Equation>
 
                     <p>
-                        Simplying the equation and multiplying both sides by  𝜃 ,
+                        Simplying the equation and multiplying both sides by <Equation inline>{String.raw`\theta`}</Equation>,
                          we gain a quadratic relationship known as the lens equation:
                     </p>
 
@@ -100,7 +100,7 @@ export function MulitpleImagingSection() {
                     </Equation>
 
                     <p>
-                        Finally, we can apply the quadratic formula to solve for 𝜃:
+                        Finally, we can apply the quadratic formula to solve for <Equation inline>{String.raw`\theta`}</Equation>:
                     </p>
 
                     <Equation>
@@ -108,11 +108,12 @@ export function MulitpleImagingSection() {
                     </Equation>
 
                     <p>
-                        Here 𝛽 denotes the angular separation between the lens and source from the observer's point of view.
+                        Here <Equation inline>{String.raw`\beta`}</Equation> denotes the angular separation between the lens and source from the observer's point of view.
                     </p>
 
                     <p>
-                        From the above equation, we can see that if  𝛽=0 , we get the expected  𝜃±=𝜃𝐸.
+                        From the above equation, we can see that if <Equation inline>{String.raw`\beta = 0`}</Equation>,
+                         we get the expected <Equation inline>{String.raw`\theta_\pm = \theta_E`}</Equation>.
                     </p>
 
                     <h3>
