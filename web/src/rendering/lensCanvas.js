@@ -163,6 +163,26 @@ function drawBackground(ctx, width, height, color) {
     ctx.restore();
 }
 
+function traceWorldPolygon(path, points, width, height, scale) {
+    if (points.length === 0) {
+        return;
+    }
+
+    const first = worldToCanvas(points[0].x, points[0].y, width, height, scale);
+
+    path.moveTo(first.x, first.y);
+
+    for (let index = 1; index < points.length; index++) {
+        const point = worldToCanvas(points[index].x, points[index].y, width, height, scale);
+
+        path.lineTo(point.x, point.y);
+    }
+
+    path.closePath();
+}
+
+
+
 export function renderLensSystem(ctx, canvas, system) {
     const { source, sourcePoints, thetaEinstein, scale, aligned, colors} = system;
 
