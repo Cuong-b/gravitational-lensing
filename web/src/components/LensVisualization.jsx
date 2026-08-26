@@ -162,17 +162,19 @@ export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein
                             VISUALIZATION_COLORS.background}}
             >
 
-                <canvas
-                    ref={canvasRef}
-                    className={isDragging ? "lens-canvas dragging" : "lens-canvas"}
-                    width="800"
-                    height="600"
-                    onPointerDown={handlePointerDown}
-                    onPointerMove={handlePointerMove}
-                    onPointerUp={handlePointerUp}
-                    onPointerCancel={handlePointerCancel}
-                    aria-label="Interactive gravitational lensing visualization. Drag the source or use the source position controls."
-                />
+                <div className="canvas-container">
+                    <canvas
+                        ref={canvasRef}
+                        className={isDragging ? "lens-canvas dragging" : "lens-canvas"}
+                        width="800"
+                        height="600"
+                        onPointerDown={handlePointerDown}
+                        onPointerMove={handlePointerMove}
+                        onPointerUp={handlePointerUp}
+                        onPointerCancel={handlePointerCancel}
+                        aria-label="Interactive gravitational lensing visualization. Drag the source or use the source position controls."
+                    />
+                </div>
 
                 <div className="visualization-legend">
 

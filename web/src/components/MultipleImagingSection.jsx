@@ -116,40 +116,50 @@ export function MulitpleImagingSection() {
                          we get the expected <Equation inline>{String.raw`\theta_\pm = \theta_E`}</Equation>.
                     </p>
 
-                    <h3>
-                        Explore the lensing effect
-                    </h3>
+                    <div className="interactive-design">
 
-                    <p>
-                        For this visualization, the lens parameters are
-                        fixed so that the Einstein radius is
-                        2.33 arcseconds. Move the source to see how its
-                        projected images change.
-                    </p>
+                        <div className="interactive-figure-header">
 
-                    <SourceControls
-                        sourceX={sourceX}
-                        sourceY={sourceY}
-                        onXChange={handleSourceXChange}
-                        onYChange={handleSourceYChange}
-                    />
+                            <div>
+                                <h3>
+                                    Explore the lensing effect
+                                </h3>
 
-                    <p className="parameter-readout">
-                        Angular separation β:
-                        {" "}
-                        {beta.toFixed(2)}
-                        {" "}
-                        arcsec
-                    </p>
+                                <p>
+                                    For this visualization, the lens parameters are
+                                    fixed so that the Einstein radius is
+                                    2.33 arcseconds. Move the source to see how its
+                                    projected images change.
+                                </p>
+                            </div>
 
-                    <LensVisualization
-                        sourceX={sourceX}
-                        sourceY={sourceY}
-                        sourcePoints={sourcePoints}
-                        thetaEinstein={thetatEinstein}
-                        sourceRadius={0.5}
-                        onSourceChange={handleSourceChange}
-                    />
+                        </div>
+
+                        <SourceControls
+                            sourceX={sourceX}
+                            sourceY={sourceY}
+                            onXChange={handleSourceXChange}
+                            onYChange={handleSourceYChange}
+                        />
+
+                        <p className="parameter-readout">
+                            Angular separation β:
+                            {" "}
+                            {beta.toFixed(2)}
+                            {" "}
+                            arcsec
+                        </p>
+
+                        <LensVisualization
+                            sourceX={sourceX}
+                            sourceY={sourceY}
+                            sourcePoints={sourcePoints}
+                            thetaEinstein={thetatEinstein}
+                            sourceRadius={0.5}
+                            onSourceChange={handleSourceChange}
+                        />
+
+                    </div>
 
                 </section>);
 
