@@ -181,7 +181,58 @@ function traceWorldPolygon(path, points, width, height, scale) {
     path.closePath();
 }
 
+export function drawSource (ctx, x, y, radius, width, height, scale, color){
+    const center = worldToCanvas(x, y, width, height, scale);
 
+    ctx.save();
+
+    ctx.fillStyle = color;
+
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 6;
+
+    ctx.beginPath();
+
+    ctx.arc(center.x, center.y, radius * scale, 0, Math.PI * 2);
+
+    ctx.fill();
+
+    ctx.restore();
+}
+
+export function drawProjection (ctx, projection, width, height, scale, color) {
+    const {plusBoundary, minusBoundary, sourceContainsLens} = projection;
+
+    ctx.save();
+
+    ctx.fillStyle = color;
+
+    ctx.globalAlpha = 0.9;
+
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 5;
+
+    if (sourceContainsLens) {
+        const path = new Path2D();
+
+        traceWorldPolygon(path, plusBoundary, width, height, scale);
+        traceWorldPolygon(path, minusBoundary, width, height, scale);
+
+        ctx.fill(path, "evenodd");
+    }
+    else {
+        const plusPath = new Path2D();
+        traceWorldPolygon(plusPath, plusBoundary, width, height, scale);
+        ctx.fill(plusPath);
+
+        const minusPath = new Path2D();
+        traceWorldPolygon(minusPath, minusBoundary, width, height, scale);
+
+        ctx.fill(minusPath);
+    }
+
+    ctx.restore();
+}
 
 export function renderLensSystem(ctx, canvas, system) {
     const { source, sourcePoints, thetaEinstein, scale, aligned, colors} = system;
