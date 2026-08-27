@@ -181,6 +181,33 @@ function traceWorldPolygon(path, points, width, height, scale) {
     path.closePath();
 }
 
+export const WORLD_EXTENT = 6;
+
+export function getWorldScale(width, height) {
+    return (Math.min(width, height) / (2 * WORLD_EXTENT));
+}
+
+export function prepareCanvas(canvas, canvasSize) {
+    const rect = canvas.getBoundingClientRect();
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const pixelWidth = Math.round(rect.width * dpr);
+
+    const pixelHeight = Math.round(rect.height * dpr);
+
+    if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
+        canvas.width = pixelWidth;
+        canvas.height = pixelHeight;
+    }
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    return {ctx, width: canvasSize.width, height: canvasSize.height};
+}
+
 export function drawSource (ctx, x, y, radius, width, height, scale, color){
     const center = worldToCanvas(x, y, width, height, scale);
 
@@ -234,28 +261,27 @@ export function drawProjection (ctx, projection, width, height, scale, color) {
     ctx.restore();
 }
 
-export function renderLensSystem(ctx, canvas, system) {
-    const { source, sourcePoints, thetaEinstein, scale, aligned, colors} = system;
+export function renderLensSystem(ctx, viewport, system) {
+    const { source, sourcePoints, thetaEinstein, projection, colors} = system;
 
-    clearCanvas( ctx, canvas.width, canvas.height);
+    const {width, height} = viewport;
 
-    drawBackground( ctx, canvas.width, canvas.height, colors.background);
+    const scale = getWorldScale(width, height);
 
-    drawAxes( ctx, canvas.width, canvas.height);
+    clearCanvas( ctx, width, height);
+
+    drawBackground( ctx, width, height, colors.background);
+
+    // drawAxes( ctx,  width, height);
 
     const center = {
-        x: canvas.width / 2,
-        y: canvas.height / 2
+        x: width / 2,
+        y: height / 2
     };
 
-    const {sourceArray, projectedArray} = projectSource(sourcePoints, source.x, source.y, thetaEinstein);
+    drawSource(ctx, source.x, source.y, source.radius, width, height, scale, colors.source);
 
-    const sourceCanvasPoints = sourceArray.map(point => worldToCanvas(point.x, point.y, canvas.width, canvas.height, scale));
-    const projectedCanvasPoints = projectedArray.map(point => worldToCanvas(point.x, point.y, canvas.width, canvas.height, scale));
-
-    drawPointCloud(ctx, sourceCanvasPoints, 1.5, colors.source, .8);
-
-    drawPointCloud(ctx, projectedCanvasPoints, 2, colors.projected, .7);
+    drawProjection(ctx, projection, width, height, scale, colors.projected);
 
     drawRing( ctx, center.x, center.y, 4, colors.lens);
 }

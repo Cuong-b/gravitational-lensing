@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { imageProjections} from "../physics/imageProjections";
-import { renderLensSystem, canvasToWorld, worldToCanvas } from "../rendering/lensCanvas";
+import { renderLensSystem, canvasToWorld, prepareCanvas, getWorldScale } from "../rendering/lensCanvas";
+import { projectCircularSource } from "../simulation/projectCircularSource";
 
 const VISUALIZATION_COLORS = {
     background: "#05070a",
@@ -20,16 +20,26 @@ export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein
 
     const [isDragging, setIsDragging] = useState(false);
 
+    const [canvasSize, setCanvasSize] = useState({width: 0, height: 0});
+
+    function pointerToWorld(event) {
+        const canvas = canvasRef.current;
+        const rect = canvas.getBoundingClientRect();
+
+        const pointerX = event.clientX - rect.left;
+        const pointerY = event.clientY - rect.top;
+
+        const scale = getWorldScale(rect.width, rect.height);
+
+        return canvasToWorld(pointerX, pointerY, rect.width, rect.height, scale);
+    }
 
     function getPointerPosition(event, canvas) {
         const rect = canvas.getBoundingClientRect();
 
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-
         return {
-            x: (event.clientX - rect.left) * scaleX,
-            y: (event.clientY - rect.top) * scaleY
+            x: (event.clientX - rect.left),
+            y: (event.clientY - rect.top)
         };
     }
 
@@ -40,9 +50,7 @@ export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein
             return;
         }
 
-        const pointerCanvas = getPointerPosition(event, canvas);
-
-        const pointerWorld = canvasToWorld(pointerCanvas.x, pointerCanvas.y, canvas.width, canvas.height, 60);
+        const pointerWorld = pointerToWorld(event);
 
         const distanceFromSource = Math.hypot(pointerWorld.x - sourceX, pointerWorld.y - sourceY);
 
@@ -68,12 +76,8 @@ export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein
         if (!draggingRef.current) {
             return;
         }
-        
-        const canvas = canvasRef.current;
 
-        const pointerCanvas = getPointerPosition(event, canvas);
-
-        const pointerWorld = canvasToWorld(pointerCanvas.x, pointerCanvas.y, canvas.width, canvas.height, 60);
+        const pointerWorld = pointerToWorld(event);
 
         let x = pointerWorld.x - dragOffsetRef.current.x;
         let y = pointerWorld.y - dragOffsetRef.current.y;
@@ -111,31 +115,48 @@ export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein
           return;
         }
 
-        const ctx = canvas.getContext("2d");
+        const observer = new ResizeObserver(([entry]) => {
+            setCanvasSize({width: entry.contentRect.width, height: entry.contentRect.height});
+        });
+
+        observer.observe(canvas);
+
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+
+        if (!canvas) {
+          return;
+        }
+
+        if (canvasSize.width === 0 || canvasSize.height === 0){
+            return;
+        }
+
+        const {ctx, width, height} = prepareCanvas(canvas, canvasSize);
 
         const animationFrame = requestAnimationFrame(() => {
                 const source = {
                     x: sourceX,
-                    y: sourceY
+                    y: sourceY,
+                    radius: sourceRadius
                 };
 
-                const epsilon = 0.001;
-
-                const aligned =
-                    Math.hypot(
-                        source.x,
-                        source.y
-                    ) < epsilon;
+                const projection = projectCircularSource({sourceX, sourceY, sourceRadius, thetaEinstein, segments: 2048});
 
                 renderLensSystem(
                     ctx,
-                    canvas,
+                    {
+                        width,
+                        height
+                    },
                     {
                         source,
                         sourcePoints,
                         thetaEinstein,
-                        scale: 60,
-                        aligned,
+                        projection,
                         colors: VISUALIZATION_COLORS
                     }
                 );
@@ -145,22 +166,9 @@ export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein
             cancelAnimationFrame(animationFrame);
           };
         
-    }, [sourceX, sourceY]);
+    }, [sourceX, sourceY, sourceRadius, thetaEinstein, canvasSize.width, canvasSize.height]);
 
-    return (<div className="visualization"
-                 style={{            
-                        "--source-color":
-                        VISUALIZATION_COLORS.source,
-
-                        "--projected-color":
-                            VISUALIZATION_COLORS.projected,
-
-                        "--lens-color":
-                            VISUALIZATION_COLORS.lens,
-
-                        "--sky-color":
-                            VISUALIZATION_COLORS.background}}
-            >
+    return (<div className="visualization">
 
                 <div className="canvas-container">
                     <canvas

@@ -1,12 +1,9 @@
 import { useState, useMemo } from "react";
-
 import { SourceControls } from "./SourceControls";
-
 import { LensVisualization } from "./LensVisualization";
-
 import { generateSourcePoints } from "../simulation/generateSource";
-
 import { Equation } from "./Equation";
+import { MultipleImagingFigure } from "./MultipleImagingFigure";
 
 export function MulitpleImagingSection() {
     
@@ -116,50 +113,7 @@ export function MulitpleImagingSection() {
                          we get the expected <Equation inline>{String.raw`\theta_\pm = \theta_E`}</Equation>.
                     </p>
 
-                    <div className="interactive-design">
-
-                        <div className="interactive-figure-header">
-
-                            <div>
-                                <h3>
-                                    Explore the lensing effect
-                                </h3>
-
-                                <p>
-                                    For this visualization, the lens parameters are
-                                    fixed so that the Einstein radius is
-                                    2.33 arcseconds. Move the source to see how its
-                                    projected images change.
-                                </p>
-                            </div>
-
-                        </div>
-
-                        <SourceControls
-                            sourceX={sourceX}
-                            sourceY={sourceY}
-                            onXChange={handleSourceXChange}
-                            onYChange={handleSourceYChange}
-                        />
-
-                        <p className="parameter-readout">
-                            Angular separation β:
-                            {" "}
-                            {beta.toFixed(2)}
-                            {" "}
-                            arcsec
-                        </p>
-
-                        <LensVisualization
-                            sourceX={sourceX}
-                            sourceY={sourceY}
-                            sourcePoints={sourcePoints}
-                            thetaEinstein={thetatEinstein}
-                            sourceRadius={0.5}
-                            onSourceChange={handleSourceChange}
-                        />
-
-                    </div>
+                    <MultipleImagingFigure thetaEinstein={2.33}/>
 
                 </section>);
 

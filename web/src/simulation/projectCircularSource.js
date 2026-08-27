@@ -7,10 +7,33 @@ export function projectCircularSource({sourceX, sourceY, sourceRadius, thetaEins
     const plusBoundary = [];
     const minusBoundary = [];
 
+    const centerDistance = Math.hypot(sourceX, sourceY);
+
+    const causticPadding = Math.max(1e-4, (4 * sourceRadius) / segments);
+
+    let projectionX = sourceX;
+    let projectionY = sourceY;
+    let projectionDistance = centerDistance;
+
+    const touchesCaustic = Math.abs(centerDistance - sourceRadius) < causticPadding;
+
+    if (touchesCaustic && centerDistance > 0) {
+        const adjustedDistance = sourceRadius + causticPadding;
+        const adjustment = adjustedDistance / centerDistance;
+
+        projectionX *= adjustment;
+
+        projectionY *= adjustment;
+
+        projectionDistance = adjustedDistance;
+    }
+
     for (let index = 0; index < segments; index++) {
         const angle = TWO_PI * index / segments;
-        const x = sourceX + sourceRadius * Math.cos(angle);
-        const y = sourceY + sourceRadius * Math.sin(angle);
+
+        const x = projectionX + sourceRadius * Math.cos(angle);
+        const y = projectionY + sourceRadius * Math.sin(angle);
+
         const beta = Math.hypot(x, y);
 
         if (beta < ZERO_TOLERANCE) {
@@ -23,7 +46,7 @@ export function projectCircularSource({sourceX, sourceY, sourceRadius, thetaEins
         minusBoundary.push(images.minus);
     }
 
-    const sourceContainsLens = Math.hypot(sourceX, sourceY) <= sourceRadius;
+    const sourceContainsLens = projectionDistance < sourceRadius;
 
     return {plusBoundary, minusBoundary, sourceContainsLens}
 }
