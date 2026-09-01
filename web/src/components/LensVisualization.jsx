@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { renderLensSystem, canvasToWorld, prepareCanvas, getWorldScale } from "../rendering/lensCanvas";
-import { projectCircularSource } from "../simulation/projectCircularSource";
 
 const VISUALIZATION_COLORS = {
     background: "#05070a",
@@ -14,6 +13,8 @@ const VISUALIZATION_COLORS = {
 export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein, sourceRadius, onSourceChange}) {
     const canvasRef = useRef(null);
 
+    const rasterBufferRef = useRef(null);
+
     const draggingRef = useRef(false);
 
     const dragOffsetRef = useRef({x: 0, y: 0});
@@ -21,6 +22,12 @@ export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein
     const [isDragging, setIsDragging] = useState(false);
 
     const [canvasSize, setCanvasSize] = useState({width: 0, height: 0});
+
+    const SOURCE_LIMIT = 5;
+
+    function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+    }
 
     function pointerToWorld(event) {
         const canvas = canvasRef.current;
@@ -89,23 +96,34 @@ export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein
             y = 0;
         }
 
+        x = clamp(x, -SOURCE_LIMIT, SOURCE_LIMIT);
+        y = clamp(y, -SOURCE_LIMIT, SOURCE_LIMIT);
+
         onSourceChange({x, y});
 
     }
 
-    function handlePointerUp(event) {
+    function endDrag() {
         draggingRef.current = false;
-
         setIsDragging(false);
+    }
 
-        if(event.currentTarget.hasPointerCapture(event.pointerId)) {
-            event.currentTarget.releasePointerCapture(event.pointerId);
+    function handlePointerUp(event) {
+        endDrag();
+
+        const canvas = event.currentTarget;
+
+        if(canvas.hasPointerCapture(event.pointerId)) {
+            canvas.releasePointerCapture(event.pointerId);
         }
     }
 
     function handlePointerCancel() {
-        draggingRef.current = false;
-        setIsDragging(false);
+        endDrag();
+    }
+
+    function handleLostPointerCapture() {
+        endDrag();
     }
 
     useEffect(() => {
@@ -144,7 +162,9 @@ export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein
                     radius: sourceRadius
                 };
 
-                const projection = projectCircularSource({sourceX, sourceY, sourceRadius, thetaEinstein, segments: 2048});
+                if (!rasterBufferRef.current){
+                    rasterBufferRef.current = document.createElement("canvas");
+                }
 
                 renderLensSystem(
                     ctx,
@@ -156,8 +176,9 @@ export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein
                         source,
                         sourcePoints,
                         thetaEinstein,
-                        projection,
-                        colors: VISUALIZATION_COLORS
+                        rasterBuffer: rasterBufferRef.current,
+                        colors: VISUALIZATION_COLORS,
+                        quality: isDragging ? 0.6 : 1
                     }
                 );
           });
@@ -166,7 +187,7 @@ export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein
             cancelAnimationFrame(animationFrame);
           };
         
-    }, [sourceX, sourceY, sourceRadius, thetaEinstein, canvasSize.width, canvasSize.height]);
+    }, [sourceX, sourceY, sourceRadius, thetaEinstein, canvasSize.width, canvasSize.height, isDragging]);
 
     return (<div className="visualization">
 
@@ -180,6 +201,7 @@ export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein
                         onPointerMove={handlePointerMove}
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerCancel}
+                        onLostPointerCapture={handleLostPointerCapture}
                         aria-label="Interactive gravitational lensing visualization. Drag the source or use the source position controls."
                     />
                 </div>

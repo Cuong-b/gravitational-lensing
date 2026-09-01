@@ -6,37 +6,6 @@ import { Equation } from "./Equation";
 import { MultipleImagingFigure } from "./MultipleImagingFigure";
 
 export function MulitpleImagingSection() {
-    
-    const [sourceX, setSourceX] = useState(0);
-    const [sourceY, setSourceY] = useState(0);
-
-    const thetatEinstein = 2.33;
-
-    const sourcePoints = useMemo(() => generateSourcePoints(6000, 0.5), []);
-
-    const beta = Math.hypot(sourceX, sourceY);
-
-    const SOURCE_LIMIT = 5;
-
-    function clamp(value, min, max) {
-        return Math.min(max, Math.max(min, value));
-    }
-
-    function handleSourceChange({x, y}) {
-        const clampedX = clamp(x, -SOURCE_LIMIT, SOURCE_LIMIT);
-        const clampedY = clamp(y, -SOURCE_LIMIT, SOURCE_LIMIT);
-
-        setSourceX(clampedX);
-        setSourceY(clampedY);
-    }
-
-    function handleSourceXChange(value){
-      setSourceX(value);
-    }
-
-    function handleSourceYChange(value){
-      setSourceY(value);
-    }
 
     return(<section className="lesson-section">
 

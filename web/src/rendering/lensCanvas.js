@@ -1,6 +1,6 @@
 import { imageProjections } from "../physics/imageProjections";
-
 import { projectSource } from "../simulation/projectSource";
+import { drawLensedSourceRaster } from "./lensedSourceRaster";
 
 export function clearCanvas(ctx, width, height) {
     ctx.clearRect(0, 0, width, height);
@@ -237,7 +237,7 @@ export function drawProjection (ctx, projection, width, height, scale, color) {
     ctx.globalAlpha = 0.9;
 
     ctx.shadowColor = color;
-    ctx.shadowBlur = 5;
+    ctx.shadowBlur = 6;
 
     if (sourceContainsLens) {
         const path = new Path2D();
@@ -246,6 +246,14 @@ export function drawProjection (ctx, projection, width, height, scale, color) {
         traceWorldPolygon(path, minusBoundary, width, height, scale);
 
         ctx.fill(path, "evenodd");
+
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.5;
+        ctx.lineJoin = "round";
+        ctx.lineCap = "round";
+        ctx.globalAlpha = 0.95;
+        ctx.stroke(path);
+        
     }
     else {
         const plusPath = new Path2D();
@@ -256,13 +264,21 @@ export function drawProjection (ctx, projection, width, height, scale, color) {
         traceWorldPolygon(minusPath, minusBoundary, width, height, scale);
 
         ctx.fill(minusPath);
+
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.5;
+        ctx.lineJoin = "round";
+        ctx.lineCap = "round";
+        ctx.globalAlpha = 0.95;
+        ctx.stroke(plusPath);
+        ctx.stroke(minusPath);
     }
 
     ctx.restore();
 }
 
 export function renderLensSystem(ctx, viewport, system) {
-    const { source, sourcePoints, thetaEinstein, projection, colors} = system;
+    const { source, sourcePoints, thetaEinstein, rasterBuffer, colors, quality} = system;
 
     const {width, height} = viewport;
 
@@ -281,7 +297,10 @@ export function renderLensSystem(ctx, viewport, system) {
 
     drawSource(ctx, source.x, source.y, source.radius, width, height, scale, colors.source);
 
-    drawProjection(ctx, projection, width, height, scale, colors.projected);
+    drawLensedSourceRaster({ctx, buffer: rasterBuffer, width: width, height: height, scale: scale, 
+        sourceX: source.x, sourceY: source.y, 
+        sourceRadius: source.radius, thetaEinstein, 
+        color: colors.projected, quality: quality});
 
     drawRing( ctx, center.x, center.y, 4, colors.lens);
 }

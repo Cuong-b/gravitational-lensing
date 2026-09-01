@@ -146,8 +146,8 @@
     height: auto;
 
     cursor: grab;
-
     touch-action: none;
+    user-select: none;
 }
 
 .lens-canvas.dragging {
