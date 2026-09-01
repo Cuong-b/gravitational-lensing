@@ -10,7 +10,7 @@ const VISUALIZATION_COLORS = {
     axes: "#64748b"
 };
 
-export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein, sourceRadius, onSourceChange}) {
+export function LensVisualization({sourceX, sourceY, thetaEinstein, sourceRadius, onSourceChange}) {
     const canvasRef = useRef(null);
 
     const rasterBufferRef = useRef(null);
@@ -39,15 +39,6 @@ export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein
         const scale = getWorldScale(rect.width, rect.height);
 
         return canvasToWorld(pointerX, pointerY, rect.width, rect.height, scale);
-    }
-
-    function getPointerPosition(event, canvas) {
-        const rect = canvas.getBoundingClientRect();
-
-        return {
-            x: (event.clientX - rect.left),
-            y: (event.clientY - rect.top)
-        };
     }
 
     function handlePointerDown(event) {
@@ -174,7 +165,6 @@ export function LensVisualization({sourceX, sourceY, sourcePoints, thetaEinstein
                     },
                     {
                         source,
-                        sourcePoints,
                         thetaEinstein,
                         rasterBuffer: rasterBufferRef.current,
                         colors: VISUALIZATION_COLORS,
