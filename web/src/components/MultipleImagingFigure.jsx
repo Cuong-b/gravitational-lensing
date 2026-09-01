@@ -63,6 +63,8 @@ export function MultipleImagingFigure({thetaEinstein = 2.33}) {
                         2.33 arcseconds. Move the source to see how its
                         projected images change.
                     </p>
+
+                    <p><br/><b>To move the source, use the <u>Source Position Sliders</u> or <u>Hold and Drag</u> the source directly.</b></p>
                 </div>
 
             </figcaption>

@@ -65,8 +65,9 @@
 .equation {
     margin-block: 1.5rem;
 
-    padding:
-        clamp(0.75rem, 2vw, 1.25rem);
+    padding: clamp(0.75rem, 2vw, 1.25rem);
+
+    font-size: clamp(.5rem, 3vw, 1rem);
 
     overflow-x: auto;
 
@@ -220,7 +221,7 @@
     }
 
     .canvas-container {
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 2.65 / 2;
     }
 
     .source-control-inputs {
