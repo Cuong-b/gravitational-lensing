@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Equation } from "./Equation.jsx";
 import { LessonFigure } from "./LessonFigure.jsx";
-// import { EinsteinRadiusFigure } from "./EinsteinRadiusFigure.jsx";
+import { EinsteinRingsFigure } from "./EinsteinRingsFigure.jsx";
 
 export function EinsteinRingsSection() {
 
@@ -177,7 +177,7 @@ export function EinsteinRingsSection() {
                 However, in a general cosmological context, <Equation inline>{String.raw`D_s \neq D_l+D_{ls}`}</Equation>.
             </aside>
 
-            {/* <EinsteinRadiusFigure /> */}
+            <EinsteinRingsFigure />
 
         </section>
     );
