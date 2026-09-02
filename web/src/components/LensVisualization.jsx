@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { renderLensSystem, canvasToWorld, prepareCanvas, getWorldScale } from "../rendering/lensCanvas";
 
-const VISUALIZATION_COLORS = {
+export const VISUALIZATION_COLORS = {
     background: "#05070a",
     source: "#f5b942",
-    projected: "#b66cff",
+    projected: "#89dcff",
     lens: "#d1d5db",
     ring: "#6b7280",
     axes: "#64748b"

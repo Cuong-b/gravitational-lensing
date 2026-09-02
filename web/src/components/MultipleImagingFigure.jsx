@@ -2,17 +2,7 @@ import { useState } from "react";
 
 import { SourceControls } from "./SourceControls.jsx";
 
-import { LensVisualization } from "./LensVisualization.jsx";
-
-
-const COLORS = {
-    background: "#05070a",
-    source: "#f5b942",
-    projected: "#9b5de5",
-    lens: "#d1d5db",
-    ring: "#6b7280",
-    axes: "#202733"
-};
+import { LensVisualization, VISUALIZATION_COLORS } from "./LensVisualization.jsx";
 
 
 export function MultipleImagingFigure({thetaEinstein = 2.33}) {
@@ -36,13 +26,13 @@ export function MultipleImagingFigure({thetaEinstein = 2.33}) {
 
             style={{
                 "--source-color":
-                    COLORS.source,
+                    VISUALIZATION_COLORS.source,
 
                 "--projected-color":
-                    COLORS.projected,
+                    VISUALIZATION_COLORS.projected,
 
                 "--lens-color":
-                    COLORS.lens
+                    VISUALIZATION_COLORS.lens
             }}
         >
 
@@ -94,7 +84,6 @@ export function MultipleImagingFigure({thetaEinstein = 2.33}) {
                 sourceY={sourceY}
                 sourceRadius={sourceRadius}
                 thetaEinstein={thetaEinstein}
-                colors={COLORS}
                 onSourceChange={handleSourceChange}
             />
 

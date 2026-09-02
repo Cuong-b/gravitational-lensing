@@ -4,6 +4,9 @@ import { LensVisualization } from "./LensVisualization";
 import { generateSourcePoints } from "../simulation/generateSource";
 import { Equation } from "./Equation";
 import { MultipleImagingFigure } from "./MultipleImagingFigure";
+import { LessonFigure } from "./LessonFigure";
+
+const imagePath = `${import.meta.env.BASE_URL}images/lensing/`;
 
 export function MulitpleImagingSection() {
 
@@ -18,11 +21,24 @@ export function MulitpleImagingSection() {
                          with one another, multiple images can be projected by the lens.
                     </p>
 
+                    <LessonFigure
+                        src={`${imagePath}multiple-imaging-hubble.jpg`}
+                        alt="Strong gravitational lens producing multiple images of a background source."
+                        caption="An observed example of multiple gravitational imaging."
+                        source="ESA/Hubble"
+                    />
+
                     <p>
                         Given an angular separation <Equation inline>{String.raw`\beta`}</Equation> between the the lens and the
                          source with respects to the observer, we can solve for the 
                          angles, <Equation inline>{String.raw`\theta_+`}</Equation> and <Equation inline>{String.raw`\theta_-`}</Equation>, where the projections of the source would appear.
                     </p>
+
+                    <LessonFigure
+                        src={`${imagePath}multiple-imaging-geometry.jpg`}
+                        alt="Geometry diagram defining source angle beta and the two gravitationally lensed image positions."
+                        caption="Geometry used to derive the multiple-image lens equation."
+                    />
 
                     <h3>Deriving the lens equation</h3>
 
