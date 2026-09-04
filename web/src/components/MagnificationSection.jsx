@@ -1,5 +1,5 @@
 import { Equation } from "./Equation.jsx";
-// import { MagnificationFigure } from "./MagnificationFigure.jsx";
+import { MagnificationFigure } from "./MagnificationFigure.jsx";
 
 
 export function MagnificationSection() {
@@ -53,7 +53,7 @@ export function MagnificationSection() {
                 the average magnification of the source calculated using the above result. 
             </p>
 
-            {/* <MagnificationFigure /> */}
+            <MagnificationFigure />
 
         </section>
     );

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MulitpleImagingSection } from "./components/MultipleImagingSection"; 
 import {EinsteinRingsSection} from "./components/EinsteinRingsSection";
 import { MagnificationSection } from "./components/MagnificationSection";
+import { IntroSection } from "./components/IntroSection";
 
 import "./App.css";
 
@@ -23,6 +24,8 @@ function App() {
                     </p>
 
                 </header>
+
+                <IntroSection />
 
                 <EinsteinRingsSection />
 

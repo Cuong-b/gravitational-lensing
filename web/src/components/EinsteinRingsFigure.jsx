@@ -104,11 +104,120 @@ export function EinsteinRingsFigure() {
                         onChange={(event) => setLogDLS(Number(event.target.value))}
                         />
                     </div>
-                    
+                    <span>
+                        Einstein Radius = {arcseconds.toExponential(2)} arcseconds
+                    </span>
                 </div>
             </section>
+
+            <div className="figure-panels">
+
+                <EinsteinGeometry
+                    dL={dL}
+                    dLS={dLS}
+                    thetaEinstein={arcseconds}
+                />
+
+                <EinsteinRingPreview
+                    thetaEinstein={arcseconds}
+                />
+
+            </div>
+
+
         </figure>
     );
+}
 
+function EinsteinGeometry({dL, dLS, thetaEinstein}) {
+    const sourceX = 90;
+    const observerX = 10;
 
+    const lensFraction = dL / (dL + dLS);
+
+    const lensX = observerX + lensFraction * (sourceX - observerX);
+
+    const projectedY = Math.tan((thetaEinstein / 3600) * Math.PI / 180) *(sourceX - observerX);
+
+    console.log("lensX", lensX, "projectedY", projectedY);
+
+    return ( 
+        <svg viewBox="0 0 100 100" className="einstein-preview">
+            <rect
+                x="0"
+                y="0"
+                width = "100%" 
+                height = "100%" 
+                fill = "black" 
+            />
+
+            <circle
+                cx = {sourceX}
+                cy = "50"
+                r = ".75"
+                fill = "#b3f7fb"
+                stroke = "#b3f7fb"
+                strokeWidth = ".25"
+            />
+
+            <circle
+                cx = {sourceX}
+                cy = {projectedY}
+                r = ".75"
+                fill = "#b3f7fb"
+                stroke = "#b3f7fb"
+                strokeWidth = ".25"
+            />
+
+            <circle
+                cx = {observerX}
+                cy = "50"
+                r = ".75"
+                fill = "#ec7979"
+                stroke = "#ec7979"
+                strokeWidth = ".25"
+            />
+
+            <circle
+                cx = {lensX}
+                cy = "50"
+                r = ".75"
+                fill = "#f4f4f4"
+                stroke = "#f4f4f4"
+                strokeWidth = ".25"
+            />
+        </svg>
+    );
+}
+
+function EinsteinRingPreview({thetaEinstein}) {
+    return (
+        <svg viewBox="-5 -5 10 10" className="einstein-preview">
+
+            <rect
+                x="-5"
+                y="-5"
+                width = "100%" 
+                height = "100%" 
+                fill = "black" 
+            />
+
+            <circle
+                cx="0"
+                cy="0"
+                r={thetaEinstein}
+                fill="none"
+                stroke="#b3f7fb"
+                strokeWidth="0.06"
+            />
+
+            <circle
+                cx="0"
+                cy="0"
+                r="0.04"
+                strokeWidth = "0.02"
+                stroke = "#fff1a5"
+            />
+        </svg>
+    );
 }
