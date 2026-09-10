@@ -1,12 +1,12 @@
 /*=== Source Controls ===*/
 .source-controls {
-    margin-block: 1.5rem;
+  margin-block: 1.5rem;
 }
 
 .source-control {
-    display: grid;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .source-control label {
@@ -21,125 +21,124 @@
 }
 
 .source-control input[type="range"] {
-    width: min(600px, 50%);
+  width: min(600px, 50%);
 }
 
 @media (max-width: 500px) {
-  .source-control-inputs{
+  .source-control-inputs {
     grid-template-columns: 1fr;
   }
 }
 
 /*=== Lesson Section ===*/
 .lesson {
-    width: min(900px, 92vw);
-    margin-inline: auto;
-    padding-block: clamp(2rem, 6vw, 5rem);
+  width: min(900px, 92vw);
+  margin-inline: auto;
+  padding-block: clamp(2rem, 6vw, 5rem);
 }
 
 .lesson-header {
-    margin-bottom: clamp(2rem, 2vw, 4rem);
+  margin-bottom: clamp(2rem, 2vw, 4rem);
 }
 
 .lesson-header h1 {
-    margin-bottom: 1rem;
-    line-height: 1.6;
+  margin-bottom: 1rem;
+  line-height: 1.6;
 }
 
 .lesson-introduction {
-    max-width: 65ch;
-    font-size: 1.1rem;
-    line-height: 1.6;
+  max-width: 65ch;
+  font-size: 1.1rem;
+  line-height: 1.6;
 }
 
 .lesson-section {
-    margin-block: clamp(3rem, 4vw, 6rem);
+  margin-block: clamp(3rem, 4vw, 6rem);
 }
 
 .lesson-section > p {
-    max-width: 70ch;
-    line-height: 1.7;
-    text-align: justify;
+  max-width: 70ch;
+  line-height: 1.7;
+  text-align: justify;
 }
 
 .equation {
-    margin-block: 1.5rem;
+  margin-block: 1.5rem;
 
-    padding: clamp(0.75rem, 2vw, 1.25rem);
+  padding: clamp(0.75rem, 2vw, 1.25rem);
 
-    font-size: clamp(.5rem, 3vw, 1rem);
+  font-size: clamp(0.5rem, 3vw, 1rem);
 
-    overflow-x: auto;
+  overflow-x: auto;
 
-    text-align: center;
+  text-align: center;
 }
 
 .lesson-note {
-    margin-block: 1.5rem;
+  margin-block: 1.5rem;
 
-    padding: 1rem 1.25rem;
+  padding: 1rem 1.25rem;
 
-    border-left: 3px solid
-        currentColor;
+  border-left: 3px solid currentColor;
 
-    font-size: 0.95rem;
+  font-size: 0.95rem;
 }
 
 /*=== Figures ===*/
 
 .lesson-figure {
-    width: min(44rem, 100%);
-    margin: clamp(2rem, 5vw, 3.5rem) auto;
+  width: min(44rem, 100%);
+  margin: clamp(2rem, 5vw, 3.5rem) auto;
 }
 
 .lesson-figure img {
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: 0.75rem;
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
 }
 
 .lesson-figure figcaption {
-    margin-top: 0.75rem;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: #6b7280;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #6b7280;
 }
 
 .lesson-image-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax( min(20rem, 100%), 1fr));
-    gap: 1rem;
-    margin-block: clamp(2rem, 5vw, 3rem);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+  gap: 1rem;
+  margin-block: clamp(2rem, 5vw, 3rem);
 }
 
 .figure-source {
-    display: block;
-    margin-top: 0.25rem;
-    font-size: 0.8rem;
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
 }
 
 .interactive-figure {
-    margin-block: clamp(2rem, 6vw, 4rem);
-    margin-inline: 0;
+  margin-block: clamp(2rem, 6vw, 4rem);
+  margin-inline: 0;
 
-    padding: clamp(1rem, 3vw, 1.5rem);
+  padding: clamp(1rem, 3vw, 1.5rem);
 
-    border: 1px solid #374151;
-    border-radius: 1rem;
+  border: 1px solid #374151;
+  border-radius: 1rem;
 
-    background: #111827;
-    color: #f9fafb;
+  background: #111827;
+  color: #f9fafb;
 }
 
 .interactive-figure-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
 
-    gap: 1rem;
+  gap: 1rem;
 
-    margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .interactive-figure-header p {
@@ -147,16 +146,16 @@
 }
 
 .figure-parameter {
-    flex: 0 0 auto;
+  flex: 0 0 auto;
 
-    padding: 0.5rem 0.75rem;
+  padding: 0.5rem 0.75rem;
 
-    border: 1px solid #374151;
-    border-radius: 0.5rem;
+  border: 1px solid #374151;
+  border-radius: 0.5rem;
 
-    font-size: 0.9rem;
+  font-size: 0.9rem;
 
-    color: #d1d5db;
+  color: #d1d5db;
 }
 
 .parameter-readout {
@@ -164,12 +163,234 @@
   color: #d1d5db;
 }
 
+/* ========================================
+   Magnification Figure
+======================================== */
+
+.magnification-figure {
+  display: block;
+
+  width: 100%;
+}
+
+.magnification-figure-header {
+  align-items: flex-start;
+}
+
+.magnification-readouts {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 0.5rem 1rem;
+
+  flex: 0 0 auto;
+
+  color: #d1d5db;
+}
+
+.magnification-control {
+  margin-block: 1.25rem 1.5rem;
+}
+
+.magnification-control > label {
+  display: block;
+
+  margin-bottom: 0.5rem;
+
+  font-weight: 600;
+}
+
+.magnification-control-row {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    5rem;
+
+  gap: 0.75rem;
+
+  align-items: center;
+}
+
+.magnification-control-row input[type="range"] {
+  width: 100%;
+
+  min-width: 0;
+}
+
+.magnification-control-row input[type="number"] {
+  width: 100%;
+
+  min-height: 2.5rem;
+}
+
+.magnification-stack {
+  display: grid;
+
+  grid-template-columns: 1fr;
+
+  gap: 1rem;
+}
+
+.magnification-lens-panel,
+.magnification-plot {
+  min-width: 0;
+
+  padding: clamp(0.75rem, 2vw, 1rem);
+
+  border: 1px solid #374151;
+
+  border-radius: 0.75rem;
+
+  background: #090d13;
+}
+
+.magnification-lens-panel .canvas-container {
+  aspect-ratio: 2 / 1;
+}
+
+.figure-panel-heading,
+.magnification-plot-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 1rem;
+
+  margin-bottom: 0.75rem;
+}
+
+.figure-panel-heading h4,
+.magnification-plot-header h4 {
+  margin: 0;
+}
+
+.figure-panel-heading span,
+.magnification-plot-header span {
+  color: #cbd5e1;
+
+  font-size: 0.9rem;
+}
+
+/*
+ * Critical rule:
+ *
+ * Magnification only moves horizontally,
+ * so use a 2:1 visualization.
+ */
+.magnification-lens-panel .canvas-container {
+  aspect-ratio: 2 / 1;
+}
+
+.magnification-legend {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 0.5rem 1rem;
+
+  margin-top: 0.75rem;
+
+  font-size: 0.9rem;
+
+  color: #d1d5e1;
+}
+
+/* ----- Magnification graph ----- */
+
+.magnification-plot-canvas {
+  width: 100%;
+
+  min-width: 0;
+}
+
+.magnification-plot-canvas svg {
+  display: block;
+
+  width: 100%;
+}
+
+.magnification-grid-line {
+  stroke: #26303d;
+
+  stroke-width: 1;
+}
+
+.magnification-axis {
+  stroke: #94a3b8;
+
+  stroke-width: 1;
+}
+
+.magnification-tick {
+  fill: #cbd5e1;
+
+  font-size: 12px;
+}
+
+.magnification-axis-label {
+  fill: #e5e7eb;
+
+  font-size: 12px;
+
+  font-weight: 500;
+}
+
+/*
+ * Complete curve:
+ * visible so users know the full relationship.
+ */
+.magnification-curve-full {
+  fill: none;
+
+  stroke: #64748b;
+
+  stroke-width: 2;
+
+  opacity: 0.45;
+}
+
+/*
+ * Portion traversed by the slider.
+ */
+.magnification-curve-active {
+  fill: none;
+
+  stroke: var(--projected-color);
+
+  stroke-width: 3;
+
+  stroke-linecap: round;
+
+  stroke-linejoin: round;
+}
+
+.magnification-current-line {
+  stroke: var(--source-color);
+
+  stroke-width: 1;
+
+  stroke-dasharray: 4 4;
+
+  opacity: 0.65;
+}
+
+.magnification-current-point {
+  fill: var(--source-color);
+
+  stroke: #ffffff;
+
+  stroke-width: 1.5;
+}
+
 .magnification-panels {
-    display: grid;
-    grid-template-columns:
-        minmax(0, 1fr)
-        minmax(0, 1fr);
-    gap: 1rem;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+  gap: 1rem;
 }
 
 /*=== Canvas ===*/
@@ -183,104 +404,150 @@
 }
 
 .lens-canvas {
-    display: block;
+  display: block;
 
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: 100%;
 
-    cursor: grab;
-    touch-action: none;
-    user-select: none;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
 }
 
 .lens-canvas.dragging {
-    cursor: grabbing;
+  cursor: grabbing;
 }
 
 /*=== Legend ===*/
 
 .visualization-legend {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 
-    gap: 1rem 1.5rem;
+  gap: 1rem 1.5rem;
 
-    margin-top: 1rem;
-    padding: 0.85rem 1rem;
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
 
-    border: 1px solid #374151;
-    border-radius: 0.75rem;
+  border: 1px solid #374151;
+  border-radius: 0.75rem;
 
-    background: #0b0f14;
-    color: #e5e7eb;
+  background: #0b0f14;
+  color: #e5e7eb;
 }
 
 .legend-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #e5e7eb;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #e5e7eb;
 }
 
 .legend-marker {
-    display: inline-block;
+  display: inline-block;
 
-    width: 0.8rem;
-    height: 0.8rem;
+  width: 0.8rem;
+  height: 0.8rem;
 
-    flex: 0 0 auto;
+  flex: 0 0 auto;
 
-    border-radius: 50%;
+  border-radius: 50%;
 }
 
 .legend-source {
-    background-color: var(--source-color);
+  background-color: var(--source-color);
 }
 
 .legend-projected {
-    background-color: var(--projected-color);
+  background-color: var(--projected-color);
 }
 
 .legend-lens {
-    border: 2px solid var(--lens-color);
+  border: 2px solid var(--lens-color);
+}
+
+/* ========================================
+   Mobile
+======================================== */
+
+@media (max-width: 600px) {
+  .magnification-figure-header {
+    flex-direction: column;
+  }
+
+  .magnification-readouts {
+    width: 100%;
+
+    justify-content: space-between;
+  }
+
+  /*
+     * Keep range + number side-by-side.
+     *
+     * This saves vertical space and the
+     * range still has usable width.
+     */
+  .magnification-control-row {
+    grid-template-columns:
+      minmax(0, 1fr)
+      4.5rem;
+  }
+
+  .magnification-lens-panel,
+  .magnification-plot {
+    padding: 0.6rem;
+  }
+
+  .magnification-lens-panel .canvas-container {
+    aspect-ratio: 2 / 1;
+  }
+
+  .magnification-legend {
+    gap: 0.4rem 0.75rem;
+
+    font-size: 0.8rem;
+  }
+
+  .figure-panel-heading,
+  .magnification-plot-header {
+    align-items: flex-start;
+  }
 }
 
 /*=== Media Query ===*/
 @media (max-width: 600px) {
+  .interactive-figure {
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+  }
 
-    .interactive-figure {
-        padding: 0.75rem;
-        border-radius: 0.75rem;
-    }
+  .interactive-figure-header {
+    flex-direction: column;
+  }
 
-    .interactive-figure-header {
-        flex-direction: column;
-    }
+  .figure-parameter {
+    align-self: flex-start;
+  }
 
-    .figure-parameter {
-        align-self: flex-start;
-    }
+  .canvas-container {
+    aspect-ratio: 2.65 / 2;
+  }
 
-    .canvas-container {
-      aspect-ratio: 2.65 / 2;
-    }
+  .source-control-inputs {
+    grid-template-columns: 1fr;
+  }
 
-    .source-control-inputs {
-        grid-template-columns: 1fr;
-    }
+  .visualization-legend {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .visualization-legend {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+  .lesson-image-grid {
+    grid-template-columns: 1fr;
+  }
 
-    .lesson-image-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .magnification-panels {
-        grid-template-columns: 1fr;
-    }
-
+  .magnification-panels {
+    grid-template-columns: 1fr;
+  }
 }

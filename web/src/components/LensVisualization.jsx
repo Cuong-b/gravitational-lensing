@@ -1,229 +1,244 @@
 import { useEffect, useRef, useState } from "react";
-import { renderLensSystem, canvasToWorld, prepareCanvas, getWorldScale } from "../rendering/lensCanvas";
+import {
+  renderLensSystem,
+  canvasToWorld,
+  prepareCanvas,
+  getWorldScale,
+} from "../rendering/lensCanvas";
 
 export const VISUALIZATION_COLORS = {
-    background: "#05070a",
-    source: "#f5b942",
-    projected: "#89dcff",
-    lens: "#d1d5db",
-    ring: "#6b7280",
-    axes: "#64748b"
+  background: "#05070a",
+  source: "#f5b942",
+  projected: "#89dcff",
+  lens: "#d1d5db",
+  ring: "#6b7280",
+  axes: "#64748b",
 };
 
-export function LensVisualization({sourceX, sourceY, thetaEinstein, sourceRadius, onSourceChange}) {
-    const canvasRef = useRef(null);
+export function LensVisualization({
+  sourceX,
+  sourceY,
+  thetaEinstein,
+  sourceRadius,
+  onSourceChange,
+  worldExtentX = 6,
+  worldExtentY = 6,
+  showLegend = true,
+}) {
+  const canvasRef = useRef(null);
 
-    const rasterBufferRef = useRef(null);
+  const rasterBufferRef = useRef(null);
 
-    const draggingRef = useRef(false);
+  const draggingRef = useRef(false);
 
-    const dragOffsetRef = useRef({x: 0, y: 0});
+  const dragOffsetRef = useRef({ x: 0, y: 0 });
 
-    const [isDragging, setIsDragging] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
-    const [canvasSize, setCanvasSize] = useState({width: 0, height: 0});
+  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
 
-    const SOURCE_LIMIT = 5;
+  const SOURCE_LIMIT = 5;
 
-    function clamp(value, min, max) {
-        return Math.min(max, Math.max(min, value));
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function pointerToWorld(event) {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+
+    const pointerX = event.clientX - rect.left;
+    const pointerY = event.clientY - rect.top;
+
+    const scale = getWorldScale(rect.width, rect.height, worldExtentX, worldExtentY);
+
+    return canvasToWorld(pointerX, pointerY, rect.width, rect.height, scale);
+  }
+
+  function handlePointerDown(event) {
+    const canvas = canvasRef.current;
+
+    if (!canvas) {
+      return;
     }
 
-    function pointerToWorld(event) {
-        const canvas = canvasRef.current;
-        const rect = canvas.getBoundingClientRect();
+    const pointerWorld = pointerToWorld(event);
 
-        const pointerX = event.clientX - rect.left;
-        const pointerY = event.clientY - rect.top;
+    const distanceFromSource = Math.hypot(pointerWorld.x - sourceX, pointerWorld.y - sourceY);
 
-        const scale = getWorldScale(rect.width, rect.height);
+    const hitPadding = 0.25;
 
-        return canvasToWorld(pointerX, pointerY, rect.width, rect.height, scale);
+    if (distanceFromSource > sourceRadius + hitPadding) {
+      return;
     }
 
-    function handlePointerDown(event) {
-        const canvas = canvasRef.current;
+    draggingRef.current = true;
 
-        if(!canvas) {
-            return;
-        }
+    setIsDragging(true);
 
-        const pointerWorld = pointerToWorld(event);
+    dragOffsetRef.current = {
+      x: pointerWorld.x - sourceX,
+      y: pointerWorld.y - sourceY,
+    };
 
-        const distanceFromSource = Math.hypot(pointerWorld.x - sourceX, pointerWorld.y - sourceY);
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
 
-        const hitPadding = 0.25;
-
-        if(distanceFromSource > sourceRadius + hitPadding) {
-            return;
-        }
-
-        draggingRef.current = true;
-
-        setIsDragging(true);
-
-        dragOffsetRef.current = {
-            x: pointerWorld.x - sourceX,
-            y: pointerWorld.y - sourceY
-        };
-
-        event.currentTarget.setPointerCapture(event.pointerId);
+  function handlePointerMove(event) {
+    if (!draggingRef.current) {
+      return;
     }
 
-    function handlePointerMove(event) {
-        if (!draggingRef.current) {
-            return;
-        }
+    const pointerWorld = pointerToWorld(event);
 
-        const pointerWorld = pointerToWorld(event);
+    let x = pointerWorld.x - dragOffsetRef.current.x;
+    let y = pointerWorld.y - dragOffsetRef.current.y;
 
-        let x = pointerWorld.x - dragOffsetRef.current.x;
-        let y = pointerWorld.y - dragOffsetRef.current.y;
+    const CENTER_SNAP = 0.05;
 
-        const CENTER_SNAP = 0.05;
-
-        if (Math.hypot(x, y) < CENTER_SNAP){
-            x = 0;
-            y = 0;
-        }
-
-        x = clamp(x, -SOURCE_LIMIT, SOURCE_LIMIT);
-        y = clamp(y, -SOURCE_LIMIT, SOURCE_LIMIT);
-
-        onSourceChange({x, y});
-
+    if (Math.hypot(x, y) < CENTER_SNAP) {
+      x = 0;
+      y = 0;
     }
 
-    function endDrag() {
-        draggingRef.current = false;
-        setIsDragging(false);
+    x = clamp(x, -SOURCE_LIMIT, SOURCE_LIMIT);
+    y = clamp(y, -SOURCE_LIMIT, SOURCE_LIMIT);
+
+    onSourceChange({ x, y });
+  }
+
+  function endDrag() {
+    draggingRef.current = false;
+    setIsDragging(false);
+  }
+
+  function handlePointerUp(event) {
+    endDrag();
+
+    const canvas = event.currentTarget;
+
+    if (canvas.hasPointerCapture(event.pointerId)) {
+      canvas.releasePointerCapture(event.pointerId);
+    }
+  }
+
+  function handlePointerCancel() {
+    endDrag();
+  }
+
+  function handleLostPointerCapture() {
+    endDrag();
+  }
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+
+    if (!canvas) {
+      return;
     }
 
-    function handlePointerUp(event) {
-        endDrag();
+    const observer = new ResizeObserver(([entry]) => {
+      setCanvasSize({
+        width: entry.contentRect.width,
+        height: entry.contentRect.height,
+      });
+    });
 
-        const canvas = event.currentTarget;
+    observer.observe(canvas);
 
-        if(canvas.hasPointerCapture(event.pointerId)) {
-            canvas.releasePointerCapture(event.pointerId);
-        }
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+
+    if (!canvas) {
+      return;
     }
 
-    function handlePointerCancel() {
-        endDrag();
+    if (canvasSize.width === 0 || canvasSize.height === 0) {
+      return;
     }
 
-    function handleLostPointerCapture() {
-        endDrag();
-    }
+    const { ctx, width, height } = prepareCanvas(canvas, canvasSize);
 
-    useEffect(() => {
-        const canvas = canvasRef.current;
+    const animationFrame = requestAnimationFrame(() => {
+      const source = {
+        x: sourceX,
+        y: sourceY,
+        radius: sourceRadius,
+      };
 
-        if (!canvas) {
-          return;
-        }
+      if (!rasterBufferRef.current) {
+        rasterBufferRef.current = document.createElement("canvas");
+      }
 
-        const observer = new ResizeObserver(([entry]) => {
-            setCanvasSize({width: entry.contentRect.width, height: entry.contentRect.height});
-        });
+      renderLensSystem(
+        ctx,
+        {
+          width,
+          height,
+        },
+        {
+          source,
+          thetaEinstein,
+          rasterBuffer: rasterBufferRef.current,
+          colors: VISUALIZATION_COLORS,
+          quality: isDragging ? 0.6 : 1,
+          worldExtentX,
+          worldExtentY,
+        },
+      );
+    });
 
-        observer.observe(canvas);
+    return () => {
+      cancelAnimationFrame(animationFrame);
+    };
+  }, [
+    sourceX,
+    sourceY,
+    sourceRadius,
+    thetaEinstein,
+    canvasSize.width,
+    canvasSize.height,
+    isDragging,
+    worldExtentX,
+    worldExtentY,
+  ]);
 
-        return () => observer.disconnect();
-    }, []);
+  return (
+    <div className="visualization">
+      <div className="canvas-container">
+        <canvas
+          ref={canvasRef}
+          className={isDragging ? "lens-canvas dragging" : "lens-canvas"}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerCancel}
+          onLostPointerCapture={handleLostPointerCapture}
+          aria-label="Interactive gravitational lensing visualization. Drag the source or use the source position controls."
+        />
+      </div>
 
-    useEffect(() => {
-        const canvas = canvasRef.current;
+      {showLegend && (
+        <div className="visualization-legend">
+          <span className="legend-item">
+            <span className="legend-marker legend-source" aria-hidden="true" />
+            Source
+          </span>
 
-        if (!canvas) {
-          return;
-        }
+          <span className="legend-item">
+            <span className="legend-marker legend-projected" aria-hidden="true" />
+            Projected image
+          </span>
 
-        if (canvasSize.width === 0 || canvasSize.height === 0){
-            return;
-        }
-
-        const {ctx, width, height} = prepareCanvas(canvas, canvasSize);
-
-        const animationFrame = requestAnimationFrame(() => {
-                const source = {
-                    x: sourceX,
-                    y: sourceY,
-                    radius: sourceRadius
-                };
-
-                if (!rasterBufferRef.current){
-                    rasterBufferRef.current = document.createElement("canvas");
-                }
-
-                renderLensSystem(
-                    ctx,
-                    {
-                        width,
-                        height
-                    },
-                    {
-                        source,
-                        thetaEinstein,
-                        rasterBuffer: rasterBufferRef.current,
-                        colors: VISUALIZATION_COLORS,
-                        quality: isDragging ? 0.6 : 1
-                    }
-                );
-          });
-
-          return () => {
-            cancelAnimationFrame(animationFrame);
-          };
-        
-    }, [sourceX, sourceY, sourceRadius, thetaEinstein, canvasSize.width, canvasSize.height, isDragging]);
-
-    return (<div className="visualization">
-
-                <div className="canvas-container">
-                    <canvas
-                        ref={canvasRef}
-                        className={isDragging ? "lens-canvas dragging" : "lens-canvas"}
-                        width="800"
-                        height="600"
-                        onPointerDown={handlePointerDown}
-                        onPointerMove={handlePointerMove}
-                        onPointerUp={handlePointerUp}
-                        onPointerCancel={handlePointerCancel}
-                        onLostPointerCapture={handleLostPointerCapture}
-                        aria-label="Interactive gravitational lensing visualization. Drag the source or use the source position controls."
-                    />
-                </div>
-
-                <div className="visualization-legend">
-
-                    <span className="legend-item">
-                        <span
-                            className="legend-marker legend-source"
-                            aria-hidden="true"
-                        />
-                        Source
-                    </span>
-
-                    <span className="legend-item">
-                        <span
-                            className="legend-marker legend-projected"
-                            aria-hidden="true"
-                        />
-                        Projected image
-                    </span>
-
-                    <span className="legend-item">
-                        <span
-                            className="legend-marker legend-lens"
-                            aria-hidden="true"
-                        />
-                        Lens position
-                    </span>
-
-                </div>
-
-            </div>
-        );
+          <span className="legend-item">
+            <span className="legend-marker legend-lens" aria-hidden="true" />
+            Lens position
+          </span>
+        </div>
+      )}
+    </div>
+  );
 }
