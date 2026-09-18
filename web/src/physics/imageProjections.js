@@ -1,11 +1,11 @@
 import {beta} from "./beta.js";
 
-export function thetaPlus(beta, thetaEinstein) {
-    return (0.5) * (beta + Math.sqrt((beta ** 2) + (4 * (thetaEinstein ** 2))));
+export function thetaPlus(b, thetaEinstein) {
+    return (0.5) * (b + Math.sqrt((b ** 2) + (4 * (thetaEinstein ** 2))));
 }
 
-export function thetaMinus(beta, thetaEinstein) {
-    return (0.5) * (beta - Math.sqrt((beta ** 2) + (4 * (thetaEinstein ** 2))));
+export function thetaMinus(b, thetaEinstein) {
+    return (0.5) * (b - Math.sqrt((b ** 2) + (4 * (thetaEinstein ** 2))));
 }
 
 export function imageProjections(x, y, thetaEinstein) {
@@ -21,7 +21,7 @@ export function imageProjections(x, y, thetaEinstein) {
             x: thetaP * Math.cos(direction),
             y: thetaP * Math.sin(direction)
         },
-        
+
         minus: {
             x: thetaM * Math.cos(direction),
             y: thetaM * Math.sin(direction)

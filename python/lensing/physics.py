@@ -38,7 +38,7 @@ def theta_minus(beta, theta_einstein):
 '''Calculates the coordinates of the lensing projections 
 given an x,y coordinate and Einstein radius in arcseconds
 '''
-def image_projections(x,y, theta_einstein): 
+def image_projections(x, y, theta_einstein): 
     direction = np.arctan2(y,x) #solve for the direction of the projection
             
     b = beta(x,y) #calculates beta
@@ -57,7 +57,7 @@ def image_projections(x,y, theta_einstein):
 '''
 Calculates the average magnification of the background source over all n points
 '''
-def magnification(x,y, theta_einstein): #einstein radius in arcsec
+def magnification(x, y, theta_einstein): #einstein radius in arcsec
     b = beta(x,y)
 
     if np.any(b == 0):
