@@ -164,6 +164,44 @@
 }
 
 /* ========================================
+   Interactive figure body
+   (controls + visualization together)
+
+   Side-by-side above the breakpoint so
+   sliders and the display are visible at
+   the same time without stacking their
+   heights; stacked below it, with the
+   visualization's own max-height (see
+   .canvas-container / .einstein-preview)
+   keeping the whole figure within a
+   typical viewport.
+======================================== */
+
+.interactive-figure-body {
+  display: grid;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.interactive-figure-controls {
+  min-width: 0;
+}
+
+.interactive-figure-controls .source-controls {
+  margin-block: 0;
+}
+
+.interactive-figure-display {
+  min-width: 0;
+}
+
+@media (min-width: 760px) {
+  .interactive-figure-body {
+    grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+  }
+}
+
+/* ========================================
    Magnification Figure
 ======================================== */
 
@@ -232,6 +270,12 @@
   gap: 1rem;
 }
 
+@media (min-width: 700px) {
+  .magnification-stack {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 .magnification-lens-panel,
 .magnification-plot {
   min-width: 0;
@@ -247,6 +291,7 @@
 
 .magnification-lens-panel .canvas-container {
   aspect-ratio: 2 / 1;
+  max-height: min(42dvh, 380px);
 }
 
 .figure-panel-heading,
@@ -272,16 +317,6 @@
   color: #cbd5e1;
 
   font-size: 0.9rem;
-}
-
-/*
- * Critical rule:
- *
- * Magnification only moves horizontally,
- * so use a 2:1 visualization.
- */
-.magnification-lens-panel .canvas-container {
-  aspect-ratio: 2 / 1;
 }
 
 .magnification-legend {
@@ -385,20 +420,31 @@
   stroke-width: 1.5;
 }
 
-.magnification-panels {
-  display: grid;
-  grid-template-columns:
-    minmax(0, 1fr)
-    minmax(0, 1fr);
-  gap: 1rem;
-}
-
 /*=== Canvas ===*/
 
 .canvas-container {
   width: 100%;
   aspect-ratio: 4 / 3;
+  max-height: min(52dvh, 520px);
   overflow: hidden;
+  border-radius: 0.75rem;
+  background: #05070a;
+}
+
+/*=== Einstein Rings geometry/ring panels ===*/
+
+.figure-panels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.einstein-preview {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-height: min(38dvh, 340px);
+  border: 1px solid #374151;
   border-radius: 0.75rem;
   background: #05070a;
 }
@@ -544,10 +590,6 @@
   }
 
   .lesson-image-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .magnification-panels {
     grid-template-columns: 1fr;
   }
 }

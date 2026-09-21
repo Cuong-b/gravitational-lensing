@@ -52,24 +52,30 @@ export function MultipleImagingFigure({ thetaEinstein = 2.33 }) {
         </div>
       </figcaption>
 
-      <SourceControls
-        sourceX={sourceX}
-        sourceY={sourceY}
-        onXChange={setSourceX}
-        onYChange={setSourceY}
-      />
+      <div className="interactive-figure-body">
+        <div className="interactive-figure-controls">
+          <SourceControls
+            sourceX={sourceX}
+            sourceY={sourceY}
+            onXChange={setSourceX}
+            onYChange={setSourceY}
+          />
 
-      <p className="parameter-readout">
-        Angular separation β: <strong>{beta.toFixed(2)}</strong> arcsec
-      </p>
+          <p className="parameter-readout">
+            Angular separation β: <strong>{beta.toFixed(2)}</strong> arcsec
+          </p>
+        </div>
 
-      <LensVisualization
-        sourceX={sourceX}
-        sourceY={sourceY}
-        sourceRadius={sourceRadius}
-        thetaEinstein={thetaEinstein}
-        onSourceChange={handleSourceChange}
-      />
+        <div className="interactive-figure-display">
+          <LensVisualization
+            sourceX={sourceX}
+            sourceY={sourceY}
+            sourceRadius={sourceRadius}
+            thetaEinstein={thetaEinstein}
+            onSourceChange={handleSourceChange}
+          />
+        </div>
+      </div>
     </figure>
   );
 }
