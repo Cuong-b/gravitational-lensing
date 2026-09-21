@@ -132,28 +132,38 @@ export function EinsteinRingsFigure() {
 function EinsteinGeometry({dL, dLS, thetaEinstein}) {
     const sourceX = 90;
     const observerX = 10;
+    const axisY = 50;
 
     const lensFraction = dL / (dL + dLS);
 
     const lensX = observerX + lensFraction * (sourceX - observerX);
 
-    const projectedY = Math.tan((thetaEinstein / 3600) * Math.PI / 180) *(sourceX - observerX);
+    // thetaEinstein is a real angle (fractions of an arcsecond to a few
+    // arcseconds), so its true tangent is many orders of magnitude too
+    // small to place on the same 0-100 axis as the schematic observer/
+    // lens/source layout above. The vertical offset is exaggerated by a
+    // fixed visual factor, and clamped, purely so the projected image is
+    // legible and visibly responds to the sliders.
+    const VISUAL_EXAGGERATION = 6;
+    const maxOffset = axisY - 10;
 
-    console.log("lensX", lensX, "projectedY", projectedY);
+    const projectedOffset = Math.min(thetaEinstein * VISUAL_EXAGGERATION, maxOffset);
 
-    return ( 
+    const projectedY = axisY - projectedOffset;
+
+    return (
         <svg viewBox="0 0 100 100" className="einstein-preview">
             <rect
                 x="0"
                 y="0"
-                width = "100%" 
-                height = "100%" 
-                fill = "black" 
+                width = "100%"
+                height = "100%"
+                fill = "black"
             />
 
             <circle
                 cx = {sourceX}
-                cy = "50"
+                cy = {axisY}
                 r = ".75"
                 fill = "#b3f7fb"
                 stroke = "#b3f7fb"
@@ -171,7 +181,7 @@ function EinsteinGeometry({dL, dLS, thetaEinstein}) {
 
             <circle
                 cx = {observerX}
-                cy = "50"
+                cy = {axisY}
                 r = ".75"
                 fill = "#ec7979"
                 stroke = "#ec7979"
@@ -180,7 +190,7 @@ function EinsteinGeometry({dL, dLS, thetaEinstein}) {
 
             <circle
                 cx = {lensX}
-                cy = "50"
+                cy = {axisY}
                 r = ".75"
                 fill = "#f4f4f4"
                 stroke = "#f4f4f4"
