@@ -4,89 +4,72 @@ import { SourceControls } from "./SourceControls.jsx";
 
 import { LensVisualization, VISUALIZATION_COLORS } from "./LensVisualization.jsx";
 
+export function MultipleImagingFigure({ thetaEinstein = 2.33 }) {
+  const [sourceX, setSourceX] = useState(0);
 
-export function MultipleImagingFigure({thetaEinstein = 2.33}) {
+  const [sourceY, setSourceY] = useState(0);
 
-    const [sourceX, setSourceX] = useState(0);
+  const sourceRadius = 0.5;
 
-    const [sourceY, setSourceY] = useState(0);
+  const beta = Math.hypot(sourceX, sourceY);
 
-    const sourceRadius = 0.5;
+  function handleSourceChange({ x, y }) {
+    setSourceX(x);
+    setSourceY(y);
+  }
 
-    const beta = Math.hypot(sourceX, sourceY);
+  return (
+    <figure
+      className="interactive-figure"
+      style={{
+        "--source-color": VISUALIZATION_COLORS.source,
 
-    function handleSourceChange({x, y}) {
-        setSourceX(x);
-        setSourceY(y);
-    }
+        "--projected-color": VISUALIZATION_COLORS.projected,
 
-    return (
-        <figure
-            className="interactive-figure"
-
-            style={{
-                "--source-color":
-                    VISUALIZATION_COLORS.source,
-
-                "--projected-color":
-                    VISUALIZATION_COLORS.projected,
-
-                "--lens-color":
-                    VISUALIZATION_COLORS.lens
-            }}
-        >
-
-            <figcaption
-                className="
+        "--lens-color": VISUALIZATION_COLORS.lens,
+      }}
+    >
+      <figcaption
+        className="
                     interactive-figure-header
                 "
-            >
+      >
+        <div>
+          <h3>Explore the Lensing Effect</h3>
 
-                <div>
-                    <h3>
-                        Explore the lensing effect
-                    </h3>
+          <p>
+            For this visualization, the lens parameters are fixed so that the Einstein radius is
+            2.33 arcseconds. Move the source to see how its projected images change.
+          </p>
 
-                    <p>
-                        For this visualization, the lens parameters are
-                        fixed so that the Einstein radius is
-                        2.33 arcseconds. Move the source to see how its
-                        projected images change.
-                    </p>
+          <p>
+            <br />
+            <b>
+              To move the source, use the <u>Source Position Sliders</u> or <u>Hold and Drag</u> the
+              source directly.
+            </b>
+          </p>
+        </div>
+      </figcaption>
 
-                    <p><br/><b>To move the source, use the <u>Source Position Sliders</u> or <u>Hold and Drag</u> the source directly.</b></p>
-                </div>
+      <SourceControls
+        sourceX={sourceX}
+        sourceY={sourceY}
+        onXChange={setSourceX}
+        onYChange={setSourceY}
+      />
 
-            </figcaption>
+      <p className="parameter-readout">
+        Angular separation β: <strong>{beta.toFixed(2)}</strong> arcsec
+      </p>
 
-
-            <SourceControls
-                sourceX={sourceX}
-                sourceY={sourceY}
-                onXChange={setSourceX}
-                onYChange={setSourceY}
-            />
-
-
-            <p className="parameter-readout">
-                Angular separation β:{" "}
-
-                <strong>
-                    {beta.toFixed(2)}
-                </strong>
-
-                {" "}arcsec
-            </p>
-
-
-            <LensVisualization
-                sourceX={sourceX}
-                sourceY={sourceY}
-                sourceRadius={sourceRadius}
-                thetaEinstein={thetaEinstein}
-                onSourceChange={handleSourceChange}
-            />
-
-        </figure>
-    );
+      <LensVisualization
+        sourceX={sourceX}
+        sourceY={sourceY}
+        sourceRadius={sourceRadius}
+        thetaEinstein={thetaEinstein}
+        onSourceChange={handleSourceChange}
+      />
+    </figure>
+  );
 }
