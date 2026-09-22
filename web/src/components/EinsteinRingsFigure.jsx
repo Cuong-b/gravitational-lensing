@@ -32,91 +32,95 @@ export function EinsteinRingsFigure() {
         </div>
       </figcaption>
 
-      <div className="interactive-figure-body">
-        <section className="source-controls interactive-figure-controls">
-          <div className="source-control">
+      <section className="source-controls einstein-controls-row">
+        <div className="source-control">
+          <div className="source-control-label-row">
             <label htmlFor="Log-Mass">Log(Mass) [Log M☉]</label>
-
             <span>Mass = {mass.toExponential(2)} M☉</span>
-
-            <div className="source-controls-inputs">
-              <input
-                id="Log-Mass"
-                type="range"
-                min="6"
-                max="12.5"
-                step="0.1"
-                value={logMass}
-                onChange={(event) => setLogMass(Number(event.target.value))}
-              />
-              <input
-                type="number"
-                min="6"
-                max="12.5"
-                step="0.01"
-                value={logMass}
-                onChange={(event) => setLogMass(Number(event.target.value))}
-              />
-            </div>
           </div>
-          <div className="source-control">
-            <label htmlFor="Log-Dl">Log(D_l) [Log parsecs]</label>
 
-            <span>D_l = {dL.toExponential(2)} parsecs</span>
-
-            <div className="source-controls-inputs">
-              <input
-                id="Log-Dl"
-                type="range"
-                min="9"
-                max="10"
-                step="0.05"
-                value={logDL}
-                onChange={(event) => setLogDL(Number(event.target.value))}
-              />
-              <input
-                type="number"
-                min="9"
-                max="10"
-                step="0.05"
-                value={logDL}
-                onChange={(event) => setLogDL(Number(event.target.value))}
-              />
-            </div>
+          <div className="source-controls-inputs">
+            <input
+              id="Log-Mass"
+              type="range"
+              min="6"
+              max="12.5"
+              step="0.1"
+              value={logMass}
+              onChange={(event) => setLogMass(Number(event.target.value))}
+            />
+            <input
+              type="number"
+              min="6"
+              max="12.5"
+              step="0.01"
+              value={logMass}
+              onChange={(event) => setLogMass(Number(event.target.value))}
+            />
           </div>
-          <div className="source-control">
-            <label htmlFor="Log-Dls">Log(D_ls) [Log parsecs]</label>
-
-            <span>D_ls = {dLS.toExponential(2)} parsecs</span>
-
-            <div className="source-controls-inputs">
-              <input
-                id="Log-Dls"
-                type="range"
-                min="9"
-                max="10"
-                step="0.05"
-                value={logDLS}
-                onChange={(event) => setLogDLS(Number(event.target.value))}
-              />
-              <input
-                type="number"
-                min="9"
-                max="10"
-                step="0.05"
-                value={logDLS}
-                onChange={(event) => setLogDLS(Number(event.target.value))}
-              />
-            </div>
-            <span>Einstein Radius = {arcseconds.toExponential(2)} arcseconds</span>
-          </div>
-        </section>
-
-        <div className="figure-panels interactive-figure-display">
-          <EinsteinGeometry dL={dL} dLS={dLS} thetaEinstein={arcseconds} />
-
-          <EinsteinRingPreview thetaEinstein={arcseconds} />
         </div>
+        <div className="source-control">
+          <div className="source-control-label-row">
+            <label htmlFor="Log-Dl">Log(D_l) [Log parsecs]</label>
+            <span>D_l = {dL.toExponential(2)} parsecs</span>
+          </div>
+
+          <div className="source-controls-inputs">
+            <input
+              id="Log-Dl"
+              type="range"
+              min="9"
+              max="10"
+              step="0.05"
+              value={logDL}
+              onChange={(event) => setLogDL(Number(event.target.value))}
+            />
+            <input
+              type="number"
+              min="9"
+              max="10"
+              step="0.05"
+              value={logDL}
+              onChange={(event) => setLogDL(Number(event.target.value))}
+            />
+          </div>
+        </div>
+        <div className="source-control">
+          <div className="source-control-label-row">
+            <label htmlFor="Log-Dls">Log(D_ls) [Log parsecs]</label>
+            <span>D_ls = {dLS.toExponential(2)} parsecs</span>
+          </div>
+
+          <div className="source-controls-inputs">
+            <input
+              id="Log-Dls"
+              type="range"
+              min="9"
+              max="10"
+              step="0.05"
+              value={logDLS}
+              onChange={(event) => setLogDLS(Number(event.target.value))}
+            />
+            <input
+              type="number"
+              min="9"
+              max="10"
+              step="0.05"
+              value={logDLS}
+              onChange={(event) => setLogDLS(Number(event.target.value))}
+            />
+          </div>
+        </div>
+      </section>
+
+      <p className="parameter-readout">
+        Einstein Radius = <strong>{arcseconds.toExponential(2)}</strong> arcseconds
+      </p>
+
+      <div className="figure-panels">
+        <EinsteinGeometry dL={dL} dLS={dLS} thetaEinstein={arcseconds} />
+
+        <EinsteinRingPreview thetaEinstein={arcseconds} />
       </div>
     </figure>
   );

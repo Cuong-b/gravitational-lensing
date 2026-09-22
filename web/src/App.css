@@ -7,13 +7,28 @@
   display: grid;
   gap: 0.5rem;
   margin-bottom: 1rem;
+  min-width: 0;
 }
 
 .source-control label {
   font-weight: 600;
 }
 
-.source-control-inputs {
+.source-control-label-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+}
+
+.source-control-label-row span {
+  color: #d1d5db;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.source-controls-inputs {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 5rem;
   gap: 1rem;
@@ -24,8 +39,28 @@
   width: min(600px, 50%);
 }
 
+/*
+ * Sliders side by side up top (matches the
+ * Magnification figure's layout), stacking
+ * below the breakpoint.
+ */
+.einstein-controls-row {
+  display: grid;
+  gap: 1rem 1.5rem;
+}
+
+@media (min-width: 700px) {
+  .einstein-controls-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .einstein-controls-row .source-control input[type="range"] {
+    width: 100%;
+  }
+}
+
 @media (max-width: 500px) {
-  .source-control-inputs {
+  .source-controls-inputs {
     grid-template-columns: 1fr;
   }
 }
@@ -435,7 +470,7 @@
 
 .figure-panels {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
 }
 
@@ -443,7 +478,7 @@
   display: block;
   width: 100%;
   aspect-ratio: 1 / 1;
-  max-height: min(38dvh, 340px);
+  max-height: min(48dvh, 420px);
   border: 1px solid #374151;
   border-radius: 0.75rem;
   background: #05070a;
@@ -580,7 +615,7 @@
     aspect-ratio: 2.65 / 2;
   }
 
-  .source-control-inputs {
+  .source-controls-inputs {
     grid-template-columns: 1fr;
   }
 
