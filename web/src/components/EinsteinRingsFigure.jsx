@@ -21,6 +21,7 @@ const EINSTEIN_COLORS = {
   source: VISUALIZATION_COLORS.source,
   lens: VISUALIZATION_COLORS.lens,
   projected: VISUALIZATION_COLORS.projected,
+  annotation: VISUALIZATION_COLORS.axes,
 };
 
 export function EinsteinRingsFigure() {
@@ -205,9 +206,43 @@ function EinsteinGeometry({ dL, dLS, thetaEinstein }) {
 
   const projectedY = axisY - projectedOffset;
 
+  // The distance brackets sit below the observer/lens/source row, in the
+  // space the projected point never occupies (it only ever moves upward
+  // from axisY), so they stay clear of it at every slider position.
+  const bracketY = axisY + 14;
+
   return (
     <svg viewBox="0 0 100 100" className="einstein-preview">
       <rect x="0" y="0" width="100%" height="100%" fill="black" />
+
+      <DistanceBracket x1={observerX} x2={lensX} y={bracketY} label="D_l" />
+      <DistanceBracket x1={lensX} x2={sourceX} y={bracketY} label="D_ls" />
+
+      {/*
+        Apparent line of sight from the observer: solid up to the lens
+        (the real, unbent view), then dotted onward to the projected
+        image position (the apparent direction, extrapolated straight
+        past the lens rather than the light's true bent path).
+      */}
+      <line
+        x1={observerX}
+        y1={axisY}
+        x2={lensX}
+        y2={axisY}
+        stroke={EINSTEIN_COLORS.annotation}
+        strokeWidth=".3"
+      />
+
+      <line
+        x1={lensX}
+        y1={axisY}
+        x2={sourceX}
+        y2={projectedY}
+        stroke={EINSTEIN_COLORS.annotation}
+        strokeWidth=".3"
+        strokeDasharray="0.3 1.2"
+        strokeLinecap="round"
+      />
 
       <circle
         cx={sourceX}
@@ -245,6 +280,24 @@ function EinsteinGeometry({ dL, dLS, thetaEinstein }) {
         strokeWidth=".25"
       />
     </svg>
+  );
+}
+
+function DistanceBracket({ x1, x2, y, label }) {
+  const tickHalfHeight = 1.5;
+  const midX = (x1 + x2) / 2;
+  const color = EINSTEIN_COLORS.annotation;
+
+  return (
+    <g stroke={color} strokeWidth=".3">
+      <line x1={x1} y1={y - tickHalfHeight} x2={x1} y2={y + tickHalfHeight} />
+      <line x1={x2} y1={y - tickHalfHeight} x2={x2} y2={y + tickHalfHeight} />
+      <line x1={x1} y1={y} x2={x2} y2={y} />
+
+      <text x={midX} y={y + 6} textAnchor="middle" fill={color} stroke="none" fontSize="4.5">
+        {label}
+      </text>
+    </g>
   );
 }
 
