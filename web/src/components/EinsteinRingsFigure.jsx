@@ -1,5 +1,27 @@
 import { useState } from "react";
 import { einsteinRadius } from "../physics/einsteinRadius.js";
+import { VISUALIZATION_COLORS } from "./LensVisualization.jsx";
+
+const MASS_RANGE = { min: 6, max: 12.5, step: 0.1 };
+const DL_RANGE = { min: 9, max: 10, step: 0.05 };
+const DLS_RANGE = { min: 9, max: 10, step: 0.05 };
+
+// Largest Einstein radius reachable by the sliders above (biggest mass,
+// closest lens, farthest source). Used to normalize the geometric view's
+// projected-image offset so it spans the display regardless of how small
+// thetaEinstein is in absolute terms.
+const MAX_THETA_ARCSEC = einsteinRadius(
+  10 ** MASS_RANGE.max,
+  10 ** DL_RANGE.min,
+  10 ** DLS_RANGE.max,
+).arcseconds;
+
+const EINSTEIN_COLORS = {
+  observer: "#f87171",
+  source: VISUALIZATION_COLORS.source,
+  lens: VISUALIZATION_COLORS.lens,
+  projected: VISUALIZATION_COLORS.projected,
+};
 
 export function EinsteinRingsFigure() {
   const [logMass, setLogMass] = useState(12);
@@ -15,7 +37,15 @@ export function EinsteinRingsFigure() {
   const { arcseconds } = einsteinRadius(mass, dL, dLS);
 
   return (
-    <figure className="interactive-figure">
+    <figure
+      className="interactive-figure"
+      style={{
+        "--observer-color": EINSTEIN_COLORS.observer,
+        "--source-color": EINSTEIN_COLORS.source,
+        "--lens-color": EINSTEIN_COLORS.lens,
+        "--projected-color": EINSTEIN_COLORS.projected,
+      }}
+    >
       <figcaption
         className="
                             interactive-figure-header
@@ -43,16 +73,16 @@ export function EinsteinRingsFigure() {
             <input
               id="Log-Mass"
               type="range"
-              min="6"
-              max="12.5"
-              step="0.1"
+              min={MASS_RANGE.min}
+              max={MASS_RANGE.max}
+              step={MASS_RANGE.step}
               value={logMass}
               onChange={(event) => setLogMass(Number(event.target.value))}
             />
             <input
               type="number"
-              min="6"
-              max="12.5"
+              min={MASS_RANGE.min}
+              max={MASS_RANGE.max}
               step="0.01"
               value={logMass}
               onChange={(event) => setLogMass(Number(event.target.value))}
@@ -69,17 +99,17 @@ export function EinsteinRingsFigure() {
             <input
               id="Log-Dl"
               type="range"
-              min="9"
-              max="10"
-              step="0.05"
+              min={DL_RANGE.min}
+              max={DL_RANGE.max}
+              step={DL_RANGE.step}
               value={logDL}
               onChange={(event) => setLogDL(Number(event.target.value))}
             />
             <input
               type="number"
-              min="9"
-              max="10"
-              step="0.05"
+              min={DL_RANGE.min}
+              max={DL_RANGE.max}
+              step={DL_RANGE.step}
               value={logDL}
               onChange={(event) => setLogDL(Number(event.target.value))}
             />
@@ -95,17 +125,17 @@ export function EinsteinRingsFigure() {
             <input
               id="Log-Dls"
               type="range"
-              min="9"
-              max="10"
-              step="0.05"
+              min={DLS_RANGE.min}
+              max={DLS_RANGE.max}
+              step={DLS_RANGE.step}
               value={logDLS}
               onChange={(event) => setLogDLS(Number(event.target.value))}
             />
             <input
               type="number"
-              min="9"
-              max="10"
-              step="0.05"
+              min={DLS_RANGE.min}
+              max={DLS_RANGE.max}
+              step={DLS_RANGE.step}
               value={logDLS}
               onChange={(event) => setLogDLS(Number(event.target.value))}
             />
@@ -121,6 +151,28 @@ export function EinsteinRingsFigure() {
         <EinsteinGeometry dL={dL} dLS={dLS} thetaEinstein={arcseconds} />
 
         <EinsteinRingPreview thetaEinstein={arcseconds} />
+      </div>
+
+      <div className="visualization-legend">
+        <span className="legend-item">
+          <span className="legend-marker legend-observer" aria-hidden="true" />
+          Observer
+        </span>
+
+        <span className="legend-item">
+          <span className="legend-marker legend-source" aria-hidden="true" />
+          Source
+        </span>
+
+        <span className="legend-item">
+          <span className="legend-marker legend-lens" aria-hidden="true" />
+          Lens position
+        </span>
+
+        <span className="legend-item">
+          <span className="legend-marker legend-projected" aria-hidden="true" />
+          Projected image
+        </span>
       </div>
     </figure>
   );
@@ -138,13 +190,18 @@ function EinsteinGeometry({ dL, dLS, thetaEinstein }) {
   // thetaEinstein is a real angle (fractions of an arcsecond to a few
   // arcseconds), so its true tangent is many orders of magnitude too
   // small to place on the same 0-100 axis as the schematic observer/
-  // lens/source layout above. The vertical offset is exaggerated by a
-  // fixed visual factor, and clamped, purely so the projected image is
-  // legible and visibly responds to the sliders.
-  const VISUAL_EXAGGERATION = 6;
+  // lens/source layout above. A sqrt scale (rather than linear) maps it
+  // onto the offset instead: thetaEinstein spans several orders of
+  // magnitude across the sliders' range, so a linear map would leave the
+  // projected point pinned near the axis except at the very highest
+  // mass values. sqrt spreads mid-range and small values out too, so the
+  // point visibly covers most of the panel's height across the sliders'
+  // usable range instead of leaving it mostly empty.
   const maxOffset = axisY - 10;
 
-  const projectedOffset = Math.min(thetaEinstein * VISUAL_EXAGGERATION, maxOffset);
+  const normalizedOffset = Math.min(Math.sqrt(thetaEinstein / MAX_THETA_ARCSEC), 1);
+
+  const projectedOffset = normalizedOffset * maxOffset;
 
   const projectedY = axisY - projectedOffset;
 
@@ -152,20 +209,41 @@ function EinsteinGeometry({ dL, dLS, thetaEinstein }) {
     <svg viewBox="0 0 100 100" className="einstein-preview">
       <rect x="0" y="0" width="100%" height="100%" fill="black" />
 
-      <circle cx={sourceX} cy={axisY} r=".75" fill="#b3f7fb" stroke="#b3f7fb" strokeWidth=".25" />
+      <circle
+        cx={sourceX}
+        cy={axisY}
+        r=".75"
+        fill={EINSTEIN_COLORS.source}
+        stroke={EINSTEIN_COLORS.source}
+        strokeWidth=".25"
+      />
 
       <circle
         cx={sourceX}
         cy={projectedY}
         r=".75"
-        fill="#b3f7fb"
-        stroke="#b3f7fb"
+        fill={EINSTEIN_COLORS.projected}
+        stroke={EINSTEIN_COLORS.projected}
         strokeWidth=".25"
       />
 
-      <circle cx={observerX} cy={axisY} r=".75" fill="#ec7979" stroke="#ec7979" strokeWidth=".25" />
+      <circle
+        cx={observerX}
+        cy={axisY}
+        r=".75"
+        fill={EINSTEIN_COLORS.observer}
+        stroke={EINSTEIN_COLORS.observer}
+        strokeWidth=".25"
+      />
 
-      <circle cx={lensX} cy={axisY} r=".75" fill="#f4f4f4" stroke="#f4f4f4" strokeWidth=".25" />
+      <circle
+        cx={lensX}
+        cy={axisY}
+        r=".75"
+        fill={EINSTEIN_COLORS.lens}
+        stroke={EINSTEIN_COLORS.lens}
+        strokeWidth=".25"
+      />
     </svg>
   );
 }
@@ -175,9 +253,16 @@ function EinsteinRingPreview({ thetaEinstein }) {
     <svg viewBox="-5 -5 10 10" className="einstein-preview">
       <rect x="-5" y="-5" width="100%" height="100%" fill="black" />
 
-      <circle cx="0" cy="0" r={thetaEinstein} fill="none" stroke="#b3f7fb" strokeWidth="0.06" />
+      <circle
+        cx="0"
+        cy="0"
+        r={thetaEinstein}
+        fill="none"
+        stroke={EINSTEIN_COLORS.projected}
+        strokeWidth="0.06"
+      />
 
-      <circle cx="0" cy="0" r="0.04" strokeWidth="0.02" stroke="#fff1a5" />
+      <circle cx="0" cy="0" r="0.04" strokeWidth="0.02" stroke={EINSTEIN_COLORS.lens} />
     </svg>
   );
 }

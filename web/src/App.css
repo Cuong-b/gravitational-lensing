@@ -548,6 +548,10 @@
   border: 2px solid var(--lens-color);
 }
 
+.legend-observer {
+  background-color: var(--observer-color);
+}
+
 /* ========================================
    Mobile
 ======================================== */
