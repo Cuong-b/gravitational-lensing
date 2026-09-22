@@ -36,7 +36,8 @@
 }
 
 .source-control input[type="range"] {
-  width: min(600px, 50%);
+  width: 100%;
+  min-width: 0;
 }
 
 /*
@@ -52,10 +53,6 @@
 @media (min-width: 700px) {
   .einstein-controls-row {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .einstein-controls-row .source-control input[type="range"] {
-    width: 100%;
   }
 }
 
