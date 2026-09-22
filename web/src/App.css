@@ -195,7 +195,10 @@
 
 .parameter-readout {
   margin-block: 1rem;
+  margin-inline: 0;
+  text-indent: 0;
   color: #d1d5db;
+  white-space: nowrap;
 }
 
 /* ========================================
