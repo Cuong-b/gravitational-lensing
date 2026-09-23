@@ -211,6 +211,12 @@ function EinsteinGeometry({ dL, dLS, thetaEinstein }) {
   // from axisY), so they stay clear of it at every slider position.
   const bracketY = axisY + 14;
 
+  // A single straight line from the observer to the projected image,
+  // split into two strokes at the lens's x position: solid before it,
+  // dotted past it. lensT is where along that line x === lensX.
+  const lensT = (lensX - observerX) / (sourceX - observerX);
+  const lensLineY = axisY + lensT * (projectedY - axisY);
+
   return (
     <svg viewBox="0 0 100 100" className="einstein-preview">
       <rect x="0" y="0" width="100%" height="100%" fill="black" />
@@ -219,23 +225,21 @@ function EinsteinGeometry({ dL, dLS, thetaEinstein }) {
       <DistanceBracket x1={lensX} x2={sourceX} y={bracketY} label="D_ls" />
 
       {/*
-        Apparent line of sight from the observer: solid up to the lens
-        (the real, unbent view), then dotted onward to the projected
-        image position (the apparent direction, extrapolated straight
-        past the lens rather than the light's true bent path).
+        Line of sight from the observer to the projected image: solid up
+        to the lens's x position, dotted past it.
       */}
       <line
         x1={observerX}
         y1={axisY}
         x2={lensX}
-        y2={axisY}
+        y2={lensLineY}
         stroke={EINSTEIN_COLORS.annotation}
         strokeWidth=".3"
       />
 
       <line
         x1={lensX}
-        y1={axisY}
+        y1={lensLineY}
         x2={sourceX}
         y2={projectedY}
         stroke={EINSTEIN_COLORS.annotation}
