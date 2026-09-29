@@ -54,6 +54,68 @@ export function MagnificationSection() {
       </p>
 
       <MagnificationFigure />
+
+      <h3>References</h3>
+
+      <ol className="reference-list">
+        <li>
+          Chornock, Ryan. Gravitational Lensing. Lecture 15, Astron 7B, University of California
+          Berkeley, Berkeley, CA, Spring 2022
+        </li>
+
+        <li>
+          Kasen, Dan. Lecture 7, Astron C161, University of California Berkeley, Berkeley, CA, Spring
+          2023
+        </li>
+
+        <li>
+          Information@eso.org. (n.d.). Gravitational lensing. ESA/Hubble | ESA/Hubble. Retrieved May 2,
+          2023, from{" "}
+          <a href="https://esahubble.org/wordbank/gravitational-lensing/#:~:text=Gravitational%20lensing%20occurs%20when%20a,accordingly%20called%20a%20gravitational%20lens">
+            https://esahubble.org/wordbank/gravitational-lensing/#:~:text=Gravitational%20lensing%20occurs%20when%20a,accordingly%20called%20a%20gravitational%20lens
+          </a>
+          .
+        </li>
+
+        <li>
+          Information@eso.org. (n.d.). Images: Gravitational Lensing. ESA/Hubble. Retrieved May 2, 2023,
+          from{" "}
+          <a href="https://esahubble.org/images/viewall/?search=gravitational%2Blens">
+            https://esahubble.org/images/viewall/?search=gravitational%2Blens
+          </a>
+        </li>
+
+        <li>
+          Kaaret, P. (n.d.). Astronomy & Astrophysics | Department of Physics & Astronomy | College ...
+          Gravitational Lensing. Retrieved May 2, 2023, from{" "}
+          <a href="http://astro.physics.uiowa.edu/~kaaret/2012f_29c235/L12_gravlens.pdf">
+            http://astro.physics.uiowa.edu/~kaaret/2012f_29c235/L12_gravlens.pdf
+          </a>
+        </li>
+
+        <li>
+          Pritchard, J. (n.d.). Lweb.cfa.harvard.edu. Gravitational Lensing. Retrieved May 2, 2023, from{" "}
+          <a href="https://lweb.cfa.harvard.edu/~dfabricant/huchra/ay202/lectures/lecture12.pdf">
+            https://lweb.cfa.harvard.edu/~dfabricant/huchra/ay202/lectures/lecture12.pdf
+          </a>
+        </li>
+
+        <li>
+          Wikimedia Foundation. (2022, December 11). Einstein radius. Wikipedia. Retrieved May 2, 2023,
+          from{" "}
+          <a href="https://en.wikipedia.org/wiki/Einstein_radius">
+            https://en.wikipedia.org/wiki/Einstein_radius
+          </a>
+        </li>
+
+        <li>
+          Wikimedia Foundation. (2023, March 21). Gravitational Lens. Wikipedia. Retrieved May 2, 2023,
+          from{" "}
+          <a href="https://en.wikipedia.org/wiki/Gravitational_lens">
+            https://en.wikipedia.org/wiki/Gravitational_lens
+          </a>
+        </li>
+      </ol>
     </section>
   );
 }

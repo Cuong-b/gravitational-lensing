@@ -116,6 +116,32 @@
   font-size: 0.95rem;
 }
 
+/*=== References ===*/
+
+.reference-list {
+  max-width: 70ch;
+
+  margin-block: 1.5rem;
+
+  padding-left: 1.25rem;
+
+  line-height: 1.7;
+
+  font-size: 0.95rem;
+}
+
+.reference-list li {
+  margin-bottom: 0.75rem;
+
+  overflow-wrap: break-word;
+}
+
+.reference-list a {
+  overflow-wrap: break-word;
+
+  word-break: break-all;
+}
+
 /*=== Figures ===*/
 
 .lesson-figure {
